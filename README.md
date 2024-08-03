@@ -14,10 +14,13 @@ Other relate repository of Chillgo Project:
 - Open source folder with terminal and use these command:
 
 > Install dependency packages and neccessary modules
-> `npm i` or `npm install`
+`npm i` or `npm install`
 
 > Run the web app
-> `npm run dev`
+`npm run dev`
+
+> Stop running
+`Ctrl + C`
 
 ## Tech Using
 
