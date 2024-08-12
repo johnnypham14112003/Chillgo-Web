@@ -25,11 +25,15 @@ Other relate repository of Chillgo Project:
 ## Tech Using
 
 - React with Vite
-- TypeScript
+- TypeScript (tsx)
 - Other package, components library:
-  - 1...
-  - 2...
+  - daisyUI
+  - uiverse
 
 ## Developers
 
 - Pham Huy Hoang (Johnny Pham)
+
+## Graphic Designer
+
+- Le Thuy Duy
