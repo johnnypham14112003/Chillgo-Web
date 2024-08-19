@@ -1,0 +1,85 @@
+/*
+    --primary-color-light-purple: #6F74F0;
+    --primary-color-green: #CDEE00;
+    --primary-color-light-dark: #20262D;
+    --secondary-color-dark: #2F2E2D;
+    --secondary-color-light-green: #E2F4A6;
+    --secondary-color-pink: #EEA0FF;
+    --secondary-color-purple: #5A4EFF;
+    --secondary-color-light-gray: #F5F5F5;
+    --secondary-color-light-bone: #F7F6FD;
+    --secondary-color-bone: #F7EFE7;
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-color: #F5F5F5;
+  --primary-text-color: #20262D;
+  --secondary-text-color: #F7F6FD;
+  --primary-button-color: #5A4EFF;
+  --secondary-button-color: #6F74F0;
+  --primary-highlight-color: #CDEE00;
+  --secondary-highlight-color: #E2F4A6;
+  --header-nav-color: linear-gradient(140deg, #ffffff 0%, #968cff 84%, #786cff 100%);
+  --special-color: #EEA0FF;
+}
+
+[data-theme="dark"] {
+  --background-color: #0A0A0A;
+  --primary-text-color: #DFD9D2;
+  --secondary-text-color: #080902;
+  --primary-button-color: #CDEE00;
+  --secondary-button-color: #E2F4A6;
+  --primary-highlight-color: #5A4EFF;
+  --secondary-highlight-color: #6F74F0;
+  --header-nav-color: linear-gradient(120deg, rgba(37, 49, 109, 1) 0%, rgba(60, 39, 110, 1) 63%, rgba(61, 26, 91, 1) 100%);
+  --special-color: #EEA0FF;
+}
+
+body, .current-theme-app {
+  background-color: var(--background-color) !important;
+}
+
+.current-theme-text {
+  color: var(--primary-text-color) !important;
+}
+
+.current-theme-button {
+  color: var(--primary-highlight-color) !important;
+  background-color: var(--primary-button-color) !important;
+}
+
+/*=============================================================================
+                                    Main font style                         */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/src/assets/fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/src/assets/fonts/Montserrat/Montserrat-Italic.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/src/assets/fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+
+strong, b, h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
