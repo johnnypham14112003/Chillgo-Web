@@ -17,8 +17,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<Landing_Page />} />
         <Route path="/home" element={<Landing_Page />} />
-        <Route path="/login" />
-        <Route path="/register" />
+        <Route path="/download" element={<NotFound_Page />} />
+        <Route path="/pricing" element={<NotFound_Page />} />
+        <Route path="/contact" element={<NotFound_Page />} />
+        <Route path="/faqs" element={<NotFound_Page />} />
+        <Route path="/authentication" element={<NotFound_Page />}/>
         <Route path="/user" />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound_Page />} />

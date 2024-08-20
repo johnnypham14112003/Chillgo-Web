@@ -1,22 +1,29 @@
 //Library
-import React, { FC, useState, ChangeEvent } from "react";
+import React, { FC, useState, ChangeEvent, useRef } from "react";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import IconButton from "@mui/material/IconButton";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuList from "@mui/material/MenuList";
 
 //Asset
 import ChillgoLogoLight from "../../assets/images/logo/logo-light-theme.png";
 import ChillgoLogoDark from "../../assets/images/logo/logo-dark-theme.png";
 
 import IconHome from "@mui/icons-material/HomeRounded";
-import IconDownload from '@mui/icons-material/DownloadRounded';
+import IconDownload from "@mui/icons-material/DownloadRounded";
+import IconContact from "@mui/icons-material/QuestionAnswerRounded";
+import IconPricing from "@mui/icons-material/PaidRounded";
+import IconQuestion from "@mui/icons-material/LiveHelpRounded";
+import IconLocker from "@mui/icons-material/LockOpenRounded";
 
 //Component
 import { ButtonToggleTheme } from "../buttons/Button_Toggle_Theme";
@@ -29,20 +36,44 @@ interface Header_Vars {
   onThemeChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const drawerWidth = 240;
-const pages = ["Products", "Pricing", "Blog"];
-
 //_______________________[ Function ]_____________________
 export const Header: FC<Header_Vars> = ({
   currentThemeMode,
   onThemeChange,
 }) => {
-  const [NavToggle_state, setNavToggle_state] = useState<boolean>(false);
+  const [NavOpen_state, setNavOpen_state] = useState(false);
+  const anchorRef = useRef<HTMLButtonElement>(null);
 
   //Nav Menu Toggle
   const toggleNavMenu = () => {
-    setNavToggle_state((prevState) => !prevState);
+    setNavOpen_state((prevState) => !prevState);
   };
+  const handleCloseNav = (event: Event | React.SyntheticEvent) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+
+    setNavOpen_state(false);
+  };
+  const handleListKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setNavOpen_state(false);
+    } else if (event.key === "Escape") {
+      setNavOpen_state(false);
+    }
+  }; // return focus to the button when we transitioned from !open -> open
+  const prevOpen = useRef(NavOpen_state);
+  React.useEffect(() => {
+    if (prevOpen.current === true && NavOpen_state === false) {
+      anchorRef.current!.focus();
+    }
+
+    prevOpen.current = NavOpen_state;
+  }, [NavOpen_state]);
 
   //-------------------------------------------------
 
@@ -75,45 +106,107 @@ export const Header: FC<Header_Vars> = ({
 
             {/* Mobile Nav Menu Toggle Button*/}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="medium"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
+              <Button
+                ref={anchorRef}
+                id="composition-button"
+                aria-controls={NavOpen_state ? "composition-menu" : undefined}
+                aria-expanded={NavOpen_state ? "true" : undefined}
                 aria-haspopup="true"
+                onClick={toggleNavMenu}
               >
                 <ButtonToggleNav
-                  isToggled={NavToggle_state}
+                  isToggled={NavOpen_state}
                   onClicked={toggleNavMenu}
                   colorValue="var(--primary-text-color)"
-                  sizeValue="1.75em"
+                  sizeValue="2.4em"
                 />
-              </IconButton>
+              </Button>
 
               {/* Menu On Mobile Responsive */}
-              <Menu
-                id="menu-appbar"
-                //anchorEl={NavToggle_state}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={NavToggle_state}
-                //onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
+              <Popper
+                open={NavOpen_state}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                placement="bottom-start"
+                transition
+                disablePortal
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={toggleNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom-start"
+                          ? "left top"
+                          : "left bottom",
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleCloseNav}>
+                        <MenuList
+                          autoFocusItem={NavOpen_state}
+                          id="composition-menu"
+                          aria-labelledby="composition-button"
+                          onKeyDown={handleListKeyDown}
+                        >
+                          <MenuItem
+                            onClick={handleCloseNav}
+                            className="current-theme-text"
+                            component="a"
+                            href="home"
+                          >
+                            Trang Chủ
+                          </MenuItem>
+
+                          <MenuItem
+                            className="current-theme-text"
+                            onClick={handleCloseNav}
+                            component="a"
+                            href="download"
+                          >
+                            Tải Ứng Dụng
+                          </MenuItem>
+
+                          <MenuItem
+                            className="current-theme-text"
+                            onClick={handleCloseNav}
+                            component="a"
+                            href="pricing"
+                          >
+                            Các Gói Trả Phí
+                          </MenuItem>
+
+                          <MenuItem
+                            className="current-theme-text"
+                            onClick={handleCloseNav}
+                            component="a"
+                            href="contact"
+                          >
+                            Liên Hệ
+                          </MenuItem>
+
+                          <MenuItem
+                            className="current-theme-text"
+                            onClick={handleCloseNav}
+                            component="a"
+                            href="faqs"
+                          >
+                            FAQS
+                          </MenuItem>
+
+                          <MenuItem>
+                            <ButtonToggleTheme
+                              isToggled={currentThemeMode}
+                              onClicked={onThemeChange}
+                              sizeValue="10px"
+                            />
+                          </MenuItem>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
             </Box>
 
             {/* Center Logo On Mobile Responsive */}
@@ -137,40 +230,89 @@ export const Header: FC<Header_Vars> = ({
               />
             </Typography>
 
-            {/* Desktop Nav Item */}
+            {/* Desktop Nav Items */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               <Typography
                 className="current-theme-text"
                 onClick={toggleNavMenu}
-                sx={{ mr: 2, display: "block" }}
+                sx={{ mr: 3, display: "block" }}
                 component="a"
                 href="home"
               >
-                <IconHome />
+                <IconHome sx={{ mr: 0.5 }} />
                 Trang Chủ
               </Typography>
+
               <Typography
                 className="current-theme-text"
                 onClick={toggleNavMenu}
-                sx={{ mr: 2, display: "block" }}
+                sx={{ mr: 3, display: "block" }}
                 component="a"
-                href="home"
+                href="download"
               >
-                <IconDownload />
+                <IconDownload sx={{ mr: 0.5 }} />
                 Tải Ứng Dụng
+              </Typography>
+
+              <Typography
+                className="current-theme-text"
+                onClick={toggleNavMenu}
+                sx={{ mr: 3, display: "block" }}
+                component="a"
+                href="pricing"
+              >
+                <IconPricing sx={{ mr: 0.5 }} />
+                Các Gói Trả Phí
+              </Typography>
+
+              <Typography
+                className="current-theme-text"
+                onClick={toggleNavMenu}
+                sx={{ mr: 3, display: "block" }}
+                component="a"
+                href="contact"
+              >
+                <IconContact sx={{ mr: 0.5 }} />
+                Liên Hệ
+              </Typography>
+
+              <Typography
+                className="current-theme-text"
+                onClick={toggleNavMenu}
+                sx={{ mr: 3, display: "block" }}
+                component="a"
+                href="faqs"
+              >
+                <IconQuestion sx={{ mr: 0.5 }} />
+                FAQS
               </Typography>
             </Box>
 
-            <Button color="inherit">Login</Button>
+            <Button
+              className="current-theme-text"
+              variant="contained"
+              startIcon={<IconLocker />}
+              sx={{
+                mr: 1,
+                backgroundColor: "var(--primary-highlight-color)",
+              }}
+              onClick={toggleNavMenu}
+              component="a"
+              href="authentication"
+            >
+              Đăng Nhập
+            </Button>
+
+            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+              <ButtonToggleTheme
+                isToggled={currentThemeMode}
+                onClicked={onThemeChange}
+                sizeValue="10px"
+              />
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
-
-      <ButtonToggleTheme
-        isToggled={currentThemeMode}
-        onClicked={onThemeChange}
-        sizeValue="10px"
-      />
     </header>
   );
 };

@@ -2,7 +2,7 @@
 import { FC, ChangeEvent, CSSProperties } from "react";
 
 //Asset
-import Blink_Star from "../../assets/icons/Blink_Star.svg";
+import Blink_Star from "../../assets/svgs/Blink_Star.svg";
 
 //Style CSS
 import "../../styles/buttons/Button_Toggle_Theme.css";
