@@ -23,11 +23,11 @@ import IconDownload from "@mui/icons-material/DownloadRounded";
 import IconContact from "@mui/icons-material/QuestionAnswerRounded";
 import IconPricing from "@mui/icons-material/PaidRounded";
 import IconQuestion from "@mui/icons-material/LiveHelpRounded";
-import IconLocker from "@mui/icons-material/LockOpenRounded";
 
 //Component
 import { ButtonToggleTheme } from "../buttons/Button_Toggle_Theme";
 import { ButtonToggleNav } from "../buttons/Button_Toggle_Nav";
+import { ButtonKeyboard3d } from "../buttons/Button_Keyboard_3d";
 
 //=============================================================================
 //_____________________[ Declaration ]___________________
@@ -141,7 +141,7 @@ export const Header: FC<Header_Vars> = ({
                           : "left bottom",
                     }}
                   >
-                    <Paper>
+                    <Paper className="current-theme-form">
                       <ClickAwayListener onClickAway={handleCloseNav}>
                         <MenuList
                           autoFocusItem={NavOpen_state}
@@ -288,28 +288,30 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
             </Box>
 
-            <Button
+            <Typography
               className="current-theme-text"
-              variant="contained"
-              startIcon={<IconLocker />}
               sx={{
-                mr: 1,
-                backgroundColor: "var(--primary-highlight-color)",
+                my: 1,
+                mb: 2,
               }}
               onClick={toggleNavMenu}
               component="a"
               href="authentication"
             >
-              Đăng Nhập
-            </Button>
+              <ButtonKeyboard3d textDisplay="Đăng Nhập" />
+            </Typography>
 
-            <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+            {/* Button Toggle Theme On Desktop View */}
+            <Box
+              sx={{ ml: 1, flexGrow: 0, display: { xs: "none", md: "flex" } }}
+            >
               <ButtonToggleTheme
                 isToggled={currentThemeMode}
                 onClicked={onThemeChange}
                 sizeValue="10px"
               />
             </Box>
+
           </Toolbar>
         </Container>
       </AppBar>
