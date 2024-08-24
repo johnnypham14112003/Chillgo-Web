@@ -13,10 +13,11 @@ import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import MenuList from "@mui/material/MenuList";
+import Slide from "@mui/material/Slide";
 
 //Asset
-import ChillgoLogoLight from "../../assets/images/logo/logo-light-theme.png";
-import ChillgoLogoDark from "../../assets/images/logo/logo-dark-theme.png";
+import Chillgo_LogoLight from "../../assets/images/logo/logo-light-theme.png";
+import Chillgo_LogoDark from "../../assets/images/logo/logo-dark-theme.png";
 
 import IconHome from "@mui/icons-material/HomeRounded";
 import IconDownload from "@mui/icons-material/DownloadRounded";
@@ -29,11 +30,18 @@ import { ButtonToggleTheme } from "../buttons/Button_Toggle_Theme";
 import { ButtonToggleNav } from "../buttons/Button_Toggle_Nav";
 import { ButtonKeyboard3d } from "../buttons/Button_Keyboard_3d";
 
+//Style
+import "../../styles/components/Footer.css";
+
 //=============================================================================
 //_____________________[ Declaration ]___________________
 interface Header_Vars {
   currentThemeMode: boolean;
   onThemeChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+interface Footer_Vars {
+  currentThemeMode: boolean;
 }
 
 //_______________________[ Function ]_____________________
@@ -82,6 +90,7 @@ export const Header: FC<Header_Vars> = ({
       <AppBar
         position="static"
         sx={{ backgroundImage: "var(--header-nav-color)" }}
+        elevation={3}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -99,7 +108,7 @@ export const Header: FC<Header_Vars> = ({
                   maxWidth: "100px",
                   maxHeight: "40px",
                 }}
-                src={currentThemeMode ? ChillgoLogoDark : ChillgoLogoLight}
+                src={currentThemeMode ? Chillgo_LogoDark : Chillgo_LogoLight}
                 alt="chillgo-logo"
               />
             </Typography>
@@ -129,7 +138,6 @@ export const Header: FC<Header_Vars> = ({
                 role={undefined}
                 placement="bottom-start"
                 transition
-                disablePortal
               >
                 {({ TransitionProps, placement }) => (
                   <Grow
@@ -141,69 +149,72 @@ export const Header: FC<Header_Vars> = ({
                           : "left bottom",
                     }}
                   >
-                    <Paper className="current-theme-form">
-                      <ClickAwayListener onClickAway={handleCloseNav}>
-                        <MenuList
-                          autoFocusItem={NavOpen_state}
-                          id="composition-menu"
-                          aria-labelledby="composition-button"
-                          onKeyDown={handleListKeyDown}
-                        >
-                          <MenuItem
-                            onClick={handleCloseNav}
-                            className="current-theme-text"
-                            component="a"
-                            href="home"
+                    <Slide
+                      direction="down"
+                      in={NavOpen_state}
+                      mountOnEnter
+                      unmountOnExit
+                    >
+                      <Paper className="current-theme-form" elevation={3}>
+                        <ClickAwayListener onClickAway={handleCloseNav}>
+                          <MenuList
+                            autoFocusItem={NavOpen_state}
+                            id="composition-menu"
+                            aria-labelledby="composition-button"
+                            onKeyDown={handleListKeyDown}
+                            className="current-theme-app"
                           >
-                            Trang Chủ
-                          </MenuItem>
+                            <MenuItem
+                              onClick={handleCloseNav}
+                              component="a"
+                              href="home"
+                            >
+                              Trang Chủ
+                            </MenuItem>
 
-                          <MenuItem
-                            className="current-theme-text"
-                            onClick={handleCloseNav}
-                            component="a"
-                            href="download"
-                          >
-                            Tải Ứng Dụng
-                          </MenuItem>
+                            <MenuItem
+                              onClick={handleCloseNav}
+                              component="a"
+                              href="download"
+                            >
+                              Tải Ứng Dụng
+                            </MenuItem>
 
-                          <MenuItem
-                            className="current-theme-text"
-                            onClick={handleCloseNav}
-                            component="a"
-                            href="pricing"
-                          >
-                            Các Gói Trả Phí
-                          </MenuItem>
+                            <MenuItem
+                              onClick={handleCloseNav}
+                              component="a"
+                              href="pricing"
+                            >
+                              Các Gói Trả Phí
+                            </MenuItem>
 
-                          <MenuItem
-                            className="current-theme-text"
-                            onClick={handleCloseNav}
-                            component="a"
-                            href="contact"
-                          >
-                            Liên Hệ
-                          </MenuItem>
+                            <MenuItem
+                              onClick={handleCloseNav}
+                              component="a"
+                              href="contact"
+                            >
+                              Liên Hệ
+                            </MenuItem>
 
-                          <MenuItem
-                            className="current-theme-text"
-                            onClick={handleCloseNav}
-                            component="a"
-                            href="faqs"
-                          >
-                            FAQS
-                          </MenuItem>
+                            <MenuItem
+                              onClick={handleCloseNav}
+                              component="a"
+                              href="faqs"
+                            >
+                              FAQS
+                            </MenuItem>
 
-                          <MenuItem>
-                            <ButtonToggleTheme
-                              isToggled={currentThemeMode}
-                              onClicked={onThemeChange}
-                              sizeValue="10px"
-                            />
-                          </MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
+                            <MenuItem>
+                              <ButtonToggleTheme
+                                isToggled={currentThemeMode}
+                                onClicked={onThemeChange}
+                                sizeValue="10px"
+                              />
+                            </MenuItem>
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Slide>
                   </Grow>
                 )}
               </Popper>
@@ -225,7 +236,7 @@ export const Header: FC<Header_Vars> = ({
                   maxWidth: "100px",
                   maxHeight: "40px",
                 }}
-                src={currentThemeMode ? ChillgoLogoDark : ChillgoLogoLight}
+                src={currentThemeMode ? Chillgo_LogoDark : Chillgo_LogoLight}
                 alt="chillgo-logo"
               />
             </Typography>
@@ -233,7 +244,6 @@ export const Header: FC<Header_Vars> = ({
             {/* Desktop Nav Items */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               <Typography
-                className="current-theme-text"
                 onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
@@ -244,7 +254,6 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
 
               <Typography
-                className="current-theme-text"
                 onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
@@ -255,7 +264,6 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
 
               <Typography
-                className="current-theme-text"
                 onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
@@ -266,7 +274,6 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
 
               <Typography
-                className="current-theme-text"
                 onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
@@ -277,7 +284,6 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
 
               <Typography
-                className="current-theme-text"
                 onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
@@ -289,7 +295,6 @@ export const Header: FC<Header_Vars> = ({
             </Box>
 
             <Typography
-              className="current-theme-text"
               sx={{
                 my: 1,
                 mb: 2,
@@ -311,7 +316,6 @@ export const Header: FC<Header_Vars> = ({
                 sizeValue="10px"
               />
             </Box>
-
           </Toolbar>
         </Container>
       </AppBar>
@@ -319,19 +323,100 @@ export const Header: FC<Header_Vars> = ({
   );
 };
 
-export const Footer = () => {
+export const Footer: FC<Footer_Vars> = ({ currentThemeMode }) => {
   return (
-    <footer>
-      <p>&copy; 2024 Chillgo</p>
-      <p>Theo </p>
-      <ul>
-        <li>
-          <a href="#privacy">Chính Sách Bảo Mật</a>
-        </li>
-        <li>
-          <a href="#terms">Terms of Service</a>
-        </li>
-      </ul>
+    <footer className="site-footer">
+      <Container maxWidth="xl">
+        <div className="site-footer-inner has-top-divider">
+          <div className="brand footer-brand">
+            <a href="home">
+              <img
+                style={{
+                  maxWidth: "100px",
+                  maxHeight: "40px",
+                }}
+                src={currentThemeMode ? Chillgo_LogoDark : Chillgo_LogoLight}
+                alt="chillgo-logo"
+              />
+            </a>
+          </div>
+
+          <ul
+            className="footer-links"
+            style={{ listStyle: "none", padding: 0 }}
+          >
+            <li>
+              <a href="contact">
+                <b>Liên Hệ</b>
+              </a>
+            </li>
+            <li>
+              <a href="pricing">
+                <b>Các Gói Trả Phí</b>
+              </a>
+            </li>
+            <li>
+              <a href="faqs">
+                <b>Câu Hỏi Thường Gặp</b>
+              </a>
+            </li>
+          </ul>
+
+          <ul className="footer-social-links">
+            <li className="facebook">
+              <a href="">
+                <span className="tooltip">
+                  <b>Facebook</b>
+                </span>
+                <svg
+                  height="2em"
+                  style={{ marginBottom: "-0.7em" }}
+                  fill="currentColor"
+                  viewBox="0 0 320 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path>
+                </svg>
+              </a>
+            </li>
+            <li className="youtube">
+              <a href="">
+                <span className="tooltip">
+                  <b>Youtube</b>
+                </span>
+                <svg
+                  height="1.8em"
+                  fill="currentColor"
+                  viewBox="0 0 461.001 461.001"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M365.257,67.393H95.744C42.866,67.393,0,110.259,0,163.137v134.728 c0,52.878,42.866,95.744,95.744,95.744h269.513c52.878,0,95.744-42.866,95.744-95.744V163.137 C461.001,110.259,418.135,67.393,365.257,67.393z M300.506,237.056l-126.06,60.123c-3.359,1.602-7.239-0.847-7.239-4.568V168.607 c0-3.774,3.982-6.22,7.348-4.514l126.06,63.881C304.363,229.873,304.298,235.248,300.506,237.056z"></path>
+                </svg>
+              </a>
+            </li>
+
+            <li className="tiktok">
+              <a href="">
+                <span className="tooltip">
+                  <b>TikTok</b>
+                </span>
+                <svg
+                  height="1.7em"
+                  fill="currentColor"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M412.19,118.66a109.27,109.27,0,0,1-9.45-5.5,132.87,132.87,0,0,1-24.27-20.62c-18.1-20.71-24.86-41.72-27.35-56.43h.1C349.14,23.9,350,16,350.13,16H267.69V334.78c0,4.28,0,8.51-.18,12.69,0,.52-.05,1-.08,1.56,0,.23,0,.47-.05.71,0,.06,0,.12,0,.18a70,70,0,0,1-35.22,55.56,68.8,68.8,0,0,1-34.11,9c-38.41,0-69.54-31.32-69.54-70s31.13-70,69.54-70a68.9,68.9,0,0,1,21.41,3.39l.1-83.94a153.14,153.14,0,0,0-118,34.52,161.79,161.79,0,0,0-35.3,43.53c-3.48,6-16.61,30.11-18.2,69.24-1,22.21,5.67,45.22,8.85,54.73v.2c2,5.6,9.75,24.71,22.38,40.82A167.53,167.53,0,0,0,115,470.66v-.2l.2.2C155.11,497.78,199.36,496,199.36,496c7.66-.31,33.32,0,62.46-13.81,32.32-15.31,50.72-38.12,50.72-38.12a158.46,158.46,0,0,0,27.64-45.93c7.46-19.61,9.95-43.13,9.95-52.53V176.49c1,.6,14.32,9.41,14.32,9.41s19.19,12.3,49.13,20.31c21.48,5.7,50.42,6.9,50.42,6.9V131.27C453.86,132.37,433.27,129.17,412.19,118.66Z"></path>
+                </svg>
+              </a>
+            </li>
+          </ul>
+
+          <div className="footer-copyright">
+            Copyrights &copy; 2024 Chillgo, all rights reserved
+          </div>
+        </div>
+      </Container>
     </footer>
   );
 };
