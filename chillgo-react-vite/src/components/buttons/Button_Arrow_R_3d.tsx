@@ -7,18 +7,20 @@ import "../../styles/buttons/Buttion_Arrow_R_3d.css";
 //====================================================================
 //Public Declare
 interface ButtonArrowR3d_Vars {
+  fontSizeValue: string;
   textDisplay: string;
   textClickedDisplay: string
 }
 
 //Public Function
 export const ButtonArrowR3d: FC<ButtonArrowR3d_Vars> = ({
+  fontSizeValue,
   textDisplay,
   textClickedDisplay
 }) => {
   return (
     <button
-      className="button-arrow-r-3d"
+      className="button-arrow-r-3d" style={{fontSize: fontSizeValue}}
     >
       <div className="button-arrow-shadow"></div>
       <svg
