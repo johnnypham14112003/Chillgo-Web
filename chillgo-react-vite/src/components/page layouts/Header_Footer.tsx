@@ -138,6 +138,7 @@ export const Header: FC<Header_Vars> = ({
                 role={undefined}
                 placement="bottom-start"
                 transition
+                sx={{zIndex:100}}
               >
                 {({ TransitionProps, placement }) => (
                   <Grow
@@ -244,7 +245,6 @@ export const Header: FC<Header_Vars> = ({
             {/* Desktop Nav Items */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               <Typography
-                onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
                 href="home"
@@ -254,7 +254,6 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
 
               <Typography
-                onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
                 href="download"
@@ -264,7 +263,6 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
 
               <Typography
-                onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
                 href="pricing"
@@ -274,7 +272,6 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
 
               <Typography
-                onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
                 href="contact"
@@ -284,7 +281,6 @@ export const Header: FC<Header_Vars> = ({
               </Typography>
 
               <Typography
-                onClick={toggleNavMenu}
                 sx={{ mr: 3, display: "block" }}
                 component="a"
                 href="faqs"
@@ -299,7 +295,6 @@ export const Header: FC<Header_Vars> = ({
                 my: 1,
                 mb: 2,
               }}
-              onClick={toggleNavMenu}
               component="a"
               href="authentication"
             >

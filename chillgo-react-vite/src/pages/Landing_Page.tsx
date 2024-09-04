@@ -18,7 +18,12 @@ import { Header, Footer } from "../components/page layouts/Header_Footer";
 import { ButtonArrowR3d } from "../components/buttons/Button_Arrow_R_3d";
 
 //Assets
-import ChillgoMobileMockup from "../assets/images/mockups/chillgo-on-iphone.png";
+import ImageChillgoIphone from "../assets/images/mockups/chillgo-on-iphone.png";
+import ImageExploreScreen from "../assets/images/mockups/iphone-mockup-explore.png";
+import ImagePlanScreen from "../assets/images/mockups/iphone-mockup-plan.png";
+import ImageChatScreen from "../assets/images/mockups/iphone-mockup-chat.png";
+import ImageVoucherScreen from "../assets/images/mockups/iphone-mockup-voucher.png";
+import ImagePayCartScreen from "../assets/images/mockups/iphone-mockup-paycart.png";
 
 import IconPermDeviceInformation from "@mui/icons-material/PermDeviceInformationRounded";
 import IconChecklist from "@mui/icons-material/ChecklistRounded";
@@ -38,6 +43,11 @@ const Landing_Page = () => {
     const savedTheme = localStorage.getItem("isDarkMode");
     return savedTheme === "true";
   });
+  const [expandedAccordion, setExpandedAccordion] = useState<string | false>(
+    "explore_tab"
+  );
+  const [selectedAccordion, setSelectedAccordion] =
+    useState<string>("explore_tab");
 
   useEffect(() => {
     document.documentElement.setAttribute(
@@ -81,7 +91,7 @@ const Landing_Page = () => {
   const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
   ))(() => ({
-    border: `1px solid green`,
+    border: `1px solid #EEA0FF`,
     "&:not(:last-child)": {
       borderBottom: 0,
     },
@@ -90,21 +100,16 @@ const Landing_Page = () => {
     },
   }));
 
-  const [expanded, setExpanded] = useState<string | false>("panel1");
-
   const handleChange =
-    (panel: string) => (_event: SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? panel : false);
+    (panelName: string) => (_event: SyntheticEvent, newExpanded: boolean) => {
+      setExpandedAccordion(newExpanded ? panelName : false);
+      setSelectedAccordion(panelName);
     };
 
   //-------------------------------------------------------------------
   //----------------------------[ UI View ]----------------------------
   return (
-    <div
-      className="current-theme-app body-wrap  boxed-container"
-      style={{ fontFamily: "Montserrat" }}
-      data-theme={isDarkMode ? "dark-theme" : "light-theme"}
-    >
+    <div>
       <Header currentThemeMode={isDarkMode} onThemeChange={handleThemeChange} />
 
       <main>
@@ -282,7 +287,7 @@ const Landing_Page = () => {
                 }}
               >
                 <img
-                  src={ChillgoMobileMockup}
+                  src={ImageChillgoIphone}
                   alt="App preview"
                   style={{ width: "100%" }}
                 />
@@ -461,7 +466,7 @@ const Landing_Page = () => {
                   textWrap: "wrap",
                   fontSize: "inherit",
                   backgroundImage:
-                    "linear-gradient(var(--secondary-text-color), transparent)",
+                    "linear-gradient(var(--secondary-text-color) 70%, transparent)",
                   borderRadius: {
                     xs: "150px 150px 0px 0px",
                     md: "150px 0px 0px 0px",
@@ -500,7 +505,7 @@ const Landing_Page = () => {
                   textWrap: "wrap",
                   fontSize: "inherit",
                   backgroundImage:
-                    "linear-gradient(var(--secondary-text-color), transparent)",
+                    "linear-gradient(var(--secondary-text-color) 70%, transparent)",
                   borderRadius: {
                     xs: "10px",
                     md: "10px 150px 0px 0px",
@@ -539,7 +544,7 @@ const Landing_Page = () => {
                   textWrap: "wrap",
                   fontSize: "inherit",
                   backgroundImage:
-                    "linear-gradient(var(--secondary-text-color), transparent)",
+                    "linear-gradient(var(--secondary-text-color) 70%, transparent)",
                   borderRadius: {
                     xs: "10px",
                     md: "10px",
@@ -577,7 +582,7 @@ const Landing_Page = () => {
                   textWrap: "wrap",
                   fontSize: "inherit",
                   backgroundImage:
-                    "linear-gradient(var(--secondary-text-color), transparent)",
+                    "linear-gradient(var(--secondary-text-color) 70%, transparent)",
                   borderRadius: "10px",
                 }}
               >
@@ -612,7 +617,7 @@ const Landing_Page = () => {
                   textWrap: "wrap",
                   fontSize: "inherit",
                   backgroundImage:
-                    "linear-gradient(var(--secondary-text-color), transparent)",
+                    "linear-gradient(var(--secondary-text-color) 70%, transparent)",
                   borderRadius: "10px",
                 }}
               >
@@ -647,7 +652,7 @@ const Landing_Page = () => {
                   textWrap: "wrap",
                   fontSize: "inherit",
                   backgroundImage:
-                    "linear-gradient(var(--secondary-text-color), transparent)",
+                    "linear-gradient(var(--secondary-text-color) 80%, transparent)",
                   borderRadius: "10px",
                 }}
               >
@@ -678,115 +683,339 @@ const Landing_Page = () => {
         </Container>
 
         {/* Media Section */}
-        <Container
-          component={"section"}
-          maxWidth="md"
-          sx={{ mb: { xs: "5em", md: "7em" } }}
-        >
-          <Paper sx={{ fontSize: { xs: 14, md: 17, lg: 20 } }}>
-            <Accordion
-              defaultExpanded
-              expanded={expanded === "panel1"}
-              onChange={handleChange("panel1")}
+        <Container component={"section"} maxWidth="lg">
+          <Paper
+            elevation={5}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "var(--secondary-button-color)",
+              px: "1em",
+              py: "2em",
+              borderRadius: "10px",
+            }}
+          >
+            <Typography
+              component="h4"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: { xs: 20, md: 27, lg: 34 },
+              }}
+              gutterBottom
             >
-              <AccordionSummary
-                id="panel1d-header"
-                aria-controls="panel1d-content"
-                expandIcon={
-                  <IconExpandMore sx={{ color: "var(--primary-text-color)" }} />
-                }
-                sx={{ backgroundColor: "var(--background-color)" }}
-              >
-                <Typography
-                  component="h6"
-                  sx={{
-                    color: "var(--primary-button-color)",
-                    fontSize: "inherit",
-                  }}
-                >
-                  Figma Content #1
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{ backgroundColor: "var(--secondary-special-color)" }}
-              >
-                <Typography component="p">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion
-              expanded={expanded === "panel2"}
-              onChange={handleChange("panel2")}
+              <b>Giao Diện Hoạt Động</b>
+            </Typography>
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: { xs: 14, md: 17, lg: 20 },
+              }}
             >
-              <AccordionSummary
-                id="panel2d-header"
-                aria-controls="panel2d-content"
-                expandIcon={
-                  <IconExpandMore sx={{ color: "var(--primary-text-color)" }} />
-                }
-                sx={{ backgroundColor: "var(--background-color)" }}
+              <Paper
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  flex: 2,
+                  mr: "20px",
+                }}
               >
-                <Typography
-                  component="h6"
-                  sx={{
-                    color: "var(--primary-button-color)",
-                    fontSize: "inherit",
-                  }}
+                <Accordion
+                  defaultExpanded
+                  expanded={expandedAccordion === "explore_tab"}
+                  onChange={handleChange("explore_tab")}
                 >
-                  Figma Content #2
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{ backgroundColor: "var(--secondary-special-color)" }}
-              >
-                <Typography component="p">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion
-              expanded={expanded === "panel3"}
-              onChange={handleChange("panel3")}
-            >
-              <AccordionSummary
-                id="panel3d-header"
-                aria-controls="panel3d-content"
-                expandIcon={
-                  <IconExpandMore sx={{ color: "var(--primary-text-color)" }} />
-                }
-                sx={{ backgroundColor: "var(--background-color)" }}
-              >
-                <Typography
-                  component="h6"
-                  sx={{
-                    color: "var(--primary-button-color)",
-                    fontSize: "inherit",
-                  }}
+                  <AccordionSummary
+                    id="explore-header"
+                    aria-controls="explore-content"
+                    expandIcon={
+                      <IconExpandMore
+                        sx={{ color: "var(--primary-button-color)" }}
+                      />
+                    }
+                    sx={{ backgroundColor: "var(--background-color)" }}
+                  >
+                    <Typography
+                      component="h6"
+                      sx={{
+                        color: "var(--primary-button-color)",
+                        fontSize: "inherit",
+                      }}
+                    >
+                      Trang Chủ, Khám Phá, Tìm Kiếm Địa Điểm
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      backgroundColor: "var(--secondary-special-color)",
+                    }}
+                  >
+                    <Typography component="p" gutterBottom>
+                      Dễ dàng lên kế hoạch hoặc tìm địa điểm mà bạn thích trong
+                      trang khám phá của chúng tôi với kho dữ liệu được tôi
+                      chúng tôi cập nhật thường xuyên để đảm bảo dữ liệu luôn
+                      luôn mới nhất
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: { xs: "flex", sm: "none" },
+                        justifyContent: "center",
+                        mx: "2em",
+                        my: "1.5em",
+                      }}
+                    >
+                      <img
+                        src={ImageExploreScreen}
+                        alt="image of iphone screen about exploring tab in chillgo ui"
+                        style={{ maxWidth: "60%" }}
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  expanded={expandedAccordion === "plan_tab"}
+                  onChange={handleChange("plan_tab")}
                 >
-                  Figma Content #3
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails
-                sx={{ backgroundColor: "var(--secondary-special-color)" }}
+                  <AccordionSummary
+                    id="plan_tab-header"
+                    aria-controls="plan_tab-content"
+                    expandIcon={
+                      <IconExpandMore
+                        sx={{ color: "var(--primary-button-color)" }}
+                      />
+                    }
+                    sx={{ backgroundColor: "var(--background-color)" }}
+                  >
+                    <Typography
+                      component="h6"
+                      sx={{
+                        color: "var(--primary-button-color)",
+                        fontSize: "inherit",
+                      }}
+                    >
+                      Soạn Thảo Kế Hoạch
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{ backgroundColor: "var(--secondary-special-color)" }}
+                  >
+                    <Typography component="p" gutterBottom>
+                      Có thể tự tạo danh sách các bản kế hoạch cho các hoạt động
+                      trong ngày hoặc một bản kế hoạch dài ngày bằng văn bản,
+                      hình ảnh, và thông tin địa điểm đính kèm.
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: { xs: "flex", sm: "none" },
+                        justifyContent: "center",
+                        mx: "2em",
+                        my: "1.5em",
+                      }}
+                    >
+                      <img
+                        src={ImagePlanScreen}
+                        alt="image of iphone screen about making plan tab in chillgo ui"
+                        style={{ maxWidth: "60%" }}
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  expanded={expandedAccordion === "AI_tab"}
+                  onChange={handleChange("AI_tab")}
+                >
+                  <AccordionSummary
+                    id="AI_tab-header"
+                    aria-controls="AI_tab-content"
+                    expandIcon={
+                      <IconExpandMore
+                        sx={{ color: "var(--primary-button-color)" }}
+                      />
+                    }
+                    sx={{ backgroundColor: "var(--background-color)" }}
+                  >
+                    <Typography
+                      component="h6"
+                      sx={{
+                        color: "var(--primary-button-color)",
+                        fontSize: "inherit",
+                      }}
+                    >
+                      AI Chat
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{ backgroundColor: "var(--secondary-special-color)" }}
+                  >
+                    <Typography component="p" gutterBottom>
+                      Tích hợp AI Chat được huấn luyện riêng về du lịch ở Việt
+                      Nam nhằm hỗ trợ bạn tốt hơn trong việc giúp bạn lên kế
+                      hoạch du lịch.
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: { xs: "flex", sm: "none" },
+                        justifyContent: "center",
+                        mx: "2em",
+                        my: "1.5em",
+                      }}
+                    >
+                      <img
+                        src={ImageChatScreen}
+                        alt="image of iphone screen about a-i chat tab in chillgo ui"
+                        style={{ maxWidth: "60%" }}
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  expanded={expandedAccordion === "voucher_tab"}
+                  onChange={handleChange("voucher_tab")}
+                >
+                  <AccordionSummary
+                    id="voucher_tab-header"
+                    aria-controls="voucher_tab-content"
+                    expandIcon={
+                      <IconExpandMore
+                        sx={{ color: "var(--primary-button-color)" }}
+                      />
+                    }
+                    sx={{ backgroundColor: "var(--background-color)" }}
+                  >
+                    <Typography
+                      component="h6"
+                      sx={{
+                        color: "var(--primary-button-color)",
+                        fontSize: "inherit",
+                      }}
+                    >
+                      Tích Điểm, Đổi Ưu Đãi
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{ backgroundColor: "var(--secondary-special-color)" }}
+                  >
+                    <Typography component="p" gutterBottom>
+                      Sử dụng thường xuyên và làm các nhiệm vụ để nhận được điểm
+                      Chillcoin để có thể đổi các gói ưu đãi giảm giá.
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: { xs: "flex", sm: "none" },
+                        justifyContent: "center",
+                        mx: "2em",
+                        my: "1.5em",
+                      }}
+                    >
+                      <img
+                        src={ImageVoucherScreen}
+                        alt="image of iphone screen about voucher tab in chillgo ui"
+                        style={{ maxWidth: "60%" }}
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  expanded={expandedAccordion === "paycart_tab"}
+                  onChange={handleChange("paycart_tab")}
+                >
+                  <AccordionSummary
+                    id="paycart_tab-header"
+                    aria-controls="paycart_tab-content"
+                    expandIcon={
+                      <IconExpandMore
+                        sx={{ color: "var(--primary-button-color)" }}
+                      />
+                    }
+                    sx={{ backgroundColor: "var(--background-color)" }}
+                  >
+                    <Typography
+                      component="h6"
+                      sx={{
+                        color: "var(--primary-button-color)",
+                        fontSize: "inherit",
+                      }}
+                    >
+                      Giỏ Hàng, Thanh Toán
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{ backgroundColor: "var(--secondary-special-color)" }}
+                  >
+                    <Typography component="p" gutterBottom>
+                      Bạn có thể thực hiện thanh toán trực tiếp trong ứng dụng
+                      mà không cần phải lên các trang web khác
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: { xs: "flex", sm: "none" },
+                        justifyContent: "center",
+                        mx: "2em",
+                        my: "1.5em",
+                      }}
+                    >
+                      <img
+                        src={ImagePayCartScreen}
+                        alt="image of iphone screen about cart and payment tab in chillgo ui"
+                        style={{ maxWidth: "60%" }}
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              </Paper>
+
+              <Box
+                sx={{
+                  display: { xs: "none", sm: "flex" },
+                  flex: 1,
+                  justifyContent: "flex-end",
+                }}
               >
-                <Typography component="p">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
+                {selectedAccordion === "explore_tab" && (
+                  <img
+                    src={ImageExploreScreen}
+                    alt="image of iphone screen about exploring tab in chillgo ui"
+                    style={{ maxWidth: "100%", maxHeight: "600px" }}
+                  />
+                )}
+                {selectedAccordion === "plan_tab" && (
+                  <img
+                    src={ImagePlanScreen}
+                    alt="image of iphone screen about making plan tab in chillgo ui"
+                    style={{ maxWidth: "100%", maxHeight: "600px" }}
+                  />
+                )}
+                {selectedAccordion === "AI_tab" && (
+                  <img
+                    src={ImageChatScreen}
+                    alt="image of iphone screen about a-i chat tab in chillgo ui"
+                    style={{ maxWidth: "100%", maxHeight: "600px" }}
+                  />
+                )}
+                {selectedAccordion === "voucher_tab" && (
+                  <img
+                    src={ImageVoucherScreen}
+                    alt="image of iphone screen about voucher tab in chillgo ui"
+                    style={{ maxWidth: "100%", maxHeight: "600px" }}
+                  />
+                )}
+                {selectedAccordion === "paycart_tab" && (
+                  <img
+                    src={ImagePayCartScreen}
+                    alt="image of iphone screen about cart and payment tab in chillgo ui"
+                    style={{ maxWidth: "100%", maxHeight: "600px" }}
+                  />
+                )}
+              </Box>
+            </Box>
           </Paper>
         </Container>
       </main>
