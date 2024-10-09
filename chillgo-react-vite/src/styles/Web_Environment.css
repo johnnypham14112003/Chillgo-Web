@@ -1,0 +1,100 @@
+/*
+    --primary-color-light-purple: #6F74F0;
+    --primary-color-green: #CDEE00;
+    --primary-color-light-dark: #20262D;
+    --secondary-color-dark: #2F2E2D;
+    --secondary-color-light-green: #E2F4A6;
+    --secondary-color-pink: #EEA0FF;
+    --secondary-color-purple: #5A4EFF;
+    --secondary-color-light-gray: #F5F5F5;
+    --secondary-color-light-bone: #F7F6FD;
+    --secondary-color-bone: #F7EFE7;
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-color: #F5F5F5;
+  --primary-text-color: #20262D;
+  --secondary-text-color: #ffffff66;
+  --primary-button-color: #5A4EFF;
+  --primary-button-highlight-color: #6F74F0;
+  --secondary-button-color: #cdee00;
+  --secondary-button-darker-color: #9bc600;
+  --secondary-button-highlight-color: #E2F4A6;
+  --secondary-button-highlight-lighter-color:#e8fab2;
+  --header-nav-color: linear-gradient(140deg, #ffffff 0%, #968cff 84%, #786cff 100%);
+  --special-color: #EEA0FF;
+  --secondary-special-color: #00000022;
+}
+
+[data-theme="dark"] {
+  --background-color: #0A0A0A;
+  --primary-text-color: #DFD9D2;
+  --secondary-text-color: #00000066;
+  --primary-button-color: #CDEE00;
+  --primary-button-highlight-color: #E2F4A6;
+  --secondary-button-color: #5A4EFF;
+  --secondary-button-darker-color: #5a1ccd;
+  --secondary-button-highlight-color: #6F74F0;
+  --secondary-button-highlight-lighter-color:rgb(117, 122, 246);
+  --header-nav-color: linear-gradient(120deg, #0a0a0a 0%, #282466 62%, #2c2771 67%, #373092 77%, #4037ac 85%, #483dc3 94%, #4c41d0 100%);
+  --special-color: #EEA0FF;
+  --secondary-special-color: #000000CC;
+}
+
+body,
+.current-theme-app {
+  background-color: var(--background-color);
+}
+
+.current-theme-text {
+  color: var(--primary-text-color);
+}
+
+.current-theme-form {
+  border: 1px solid var(--special-color);
+  background-color: var(--background-color);
+}
+
+/*=============================================================================
+                                    Main font style                         */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/src/assets/fonts/Montserrat/Montserrat-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/src/assets/fonts/Montserrat/Montserrat-Italic.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/src/assets/fonts/Montserrat/Montserrat-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+html *{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  transition: background-color 0.3s ease;
+}
+
+strong,
+b,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+}
