@@ -41,10 +41,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<Landing_Page />} />
           <Route path="/home" element={<Landing_Page />} />
-          <Route path="/download" element={<NotFound_Page />} />
+          <Route path="/download" element={<Download_Page />} />
           <Route path="/pricing" element={<Pricing_Page />} />
           <Route path="/contact" element={<Contact_Page />} />
-          <Route path="/faqs" element={<NotFound_Page />} />
+          <Route path="/faqs" element={<FAQS_Page />} />
           <Route path="/authentication" element={<Authentication_Page />} />
           <Route path="/user" />
           <Route path="/dashboard" element={<Dashboard />} />
