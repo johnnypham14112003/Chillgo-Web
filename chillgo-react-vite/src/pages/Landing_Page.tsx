@@ -73,7 +73,7 @@ const Landing_Page = () => {
     localStorage.setItem("isDarkMode", newTheme.toString());
   };
 
-  //---------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------
   //----------------------------[ Handle Resize Button 3d ]----------------------------
   const getFontSize_ButtonR3d = (): string => {
     if (window.innerWidth >= 1200) {

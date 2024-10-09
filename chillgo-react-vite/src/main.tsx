@@ -7,10 +7,13 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 //Import pages
 import Landing_Page from "./pages/Landing_Page";
 import Dashboard from "./pages/Dashboard_Page";
+import Authentication_Page from "./pages/Authentication_Page";
 import NotFound_Page from "./pages/NotFound_Page";
 
 //Import styles
 import "../src/styles/Web_Environment.css";
+import Contact_Page from "./pages/Contact_Page";
+import Pricing_Page from "./pages/Pricing_Page";
 
 const theme = createTheme({
   typography: {
@@ -39,10 +42,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<Landing_Page />} />
           <Route path="/home" element={<Landing_Page />} />
           <Route path="/download" element={<NotFound_Page />} />
-          <Route path="/pricing" element={<NotFound_Page />} />
-          <Route path="/contact" element={<NotFound_Page />} />
+          <Route path="/pricing" element={<Pricing_Page />} />
+          <Route path="/contact" element={<Contact_Page />} />
           <Route path="/faqs" element={<NotFound_Page />} />
-          <Route path="/authentication" element={<NotFound_Page />} />
+          <Route path="/authentication" element={<Authentication_Page />} />
           <Route path="/user" />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="*" element={<NotFound_Page />} />

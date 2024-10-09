@@ -1,5 +1,5 @@
 //Library
-import { FC, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -12,9 +12,7 @@ import { Header, Footer } from "../components/page layouts/Header_Footer";
 import ImageChillgoMascosBot from "../assets/images/mascos/sad-bot.png";
 import ImageDesertMountain from "../assets/images/not-found.png";
 
-interface Notfound_Vars {}
-
-const NotFound_Page: FC<Notfound_Vars> = () => {
+const NotFound_Page= () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     //assign default value
     const savedTheme = localStorage.getItem("isDarkMode");
