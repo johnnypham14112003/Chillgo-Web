@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { Header, Footer } from "../components/page layouts/Header_Footer";
 
 //Assets
-import ImageChillgoMascosBot from "../assets/images/mascos/sad-bot.png";
+import ImageChillgoMascosBot from "../assets/images/mascos/sad-mascos.png";
 import ImageDesertMountain from "../assets/images/not-found.png";
 
 const NotFound_Page= () => {
