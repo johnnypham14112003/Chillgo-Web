@@ -1,14 +1,17 @@
 //Library
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+
+import IconVisibility from "@mui/icons-material/VisibilityRounded";
+import IconVisibilityOff from "@mui/icons-material/VisibilityOffRounded";
 
 //Components
 import { Header, Footer } from "../components/page layouts/Header_Footer";
@@ -22,14 +25,18 @@ const Server_URL = import.meta.env.VITE_SERVER_URL;
 
 //=============================================================================================
 const Authentication_Page = () => {
+  
+  //---------------------[ Declare ]-----------------------------
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     //assign default value
     const savedTheme = localStorage.getItem("isDarkMode");
     return savedTheme === "true";
   });
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
 
   // ----------------------------------------------------------------
@@ -40,7 +47,7 @@ const Authentication_Page = () => {
     );
   }, [isDarkMode]);
 
-  const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThemeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newTheme = event.target.checked;
     setIsDarkMode(newTheme);
     localStorage.setItem("isDarkMode", newTheme.toString());
@@ -52,10 +59,14 @@ const Authentication_Page = () => {
     setFullName("");
     setEmail("");
     setPassword("");
+    setShowPassword(false);
   };
 
   // ----------------------------------------------------------------
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleTogglePassword = () => setShowPassword((show) => !show);
+
+  // ----------------------------------------------------------------
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
@@ -66,8 +77,8 @@ const Authentication_Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email,
-          password,
+          "email": email,
+          "password": password,
         }),
       });
 
@@ -83,10 +94,46 @@ const Authentication_Page = () => {
         // Chuyển hướng đến trang Dashboard
         navigate("/dashboard");
       } else {
-        // Nếu role không phải là Admin hoặc Nhân Viên thì có thể xử lý logic khác
-        setError("Bạn không có quyền truy cập trang Dashboard.");
+        // Nếu role không phải là Admin hoặc Nhân Viên về homepage
+        navigate("/");
+      }
+    } catch (err) {
+      alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+    }
+  };
+
+  const handleRegister = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // Thực hiện gọi API
+      const response = await fetch(`${Server_URL}/api/accounts/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "full-name": fullName,
+          "email": email,
+          "password": password,
+        }),
+      });
+
+      if (!response.ok) {
+        alert(`Đã có lỗi xảy ra: ${response.body}`);
       }
 
+      const data = await response.json();
+
+      // Kiểm tra role trong response và chuyển hướng nếu cần
+      const role = data["account-info"].role;
+      if (role === "Admin" || role === "Nhân Viên") {
+        // Chuyển hướng đến trang Dashboard
+        navigate("/dashboard");
+      } else {
+        // Nếu role không phải là Admin hoặc Nhân Viên về homepage
+        navigate("/");
+      }
     } catch (err) {
       alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
     }
@@ -139,6 +186,7 @@ const Authentication_Page = () => {
               label="Email"
               placeholder="example@gmail.com"
               variant="outlined"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               sx={{
                 my: 1,
@@ -168,10 +216,28 @@ const Authentication_Page = () => {
             />
             <TextField
               label="Mật Khẩu"
-              type="password"
-              placeholder="Password"
+              type={showPassword ? "text" : "password"}
+              placeholder="123456..."
               variant="outlined"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: password && (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleTogglePassword}
+                      edge="end"
+                    >
+                      {showPassword ? (
+                        <IconVisibilityOff />
+                      ) : (
+                        <IconVisibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               sx={{
                 my: 1,
                 width: "100%",
@@ -201,6 +267,7 @@ const Authentication_Page = () => {
 
             <Button
               variant="contained"
+              onClick={handleLogin}
               sx={{
                 my: 2,
                 color: "var(--background-color)",
@@ -216,23 +283,28 @@ const Authentication_Page = () => {
               Đăng nhập ngay
             </Button>
 
-            <Typography variant="body2" sx={{ mt: 2 }}>Hoặc tiếp tục với</Typography>
-            <Box >
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              Hoặc tiếp tục với
+            </Typography>
+            <Box>
               <IconButton
                 href="#"
                 sx={{
                   Width: "48px",
                   Height: "48px",
-                  mx:"10px"
+                  mx: "10px",
                 }}
               >
                 <img src={IconGoogle} alt="Icon Login Google" />
               </IconButton>
-              <IconButton href="#" sx={{
+              <IconButton
+                href="#"
+                sx={{
                   Width: "48px",
                   Height: "48px",
-                  mx:"10px"
-                }}>
+                  mx: "10px",
+                }}
+              >
                 <img src={IconFacebook} alt="Icon Login Facebook" />
               </IconButton>
             </Box>
@@ -258,6 +330,7 @@ const Authentication_Page = () => {
               label="Họ Và Tên"
               placeholder="Nguyễn Văn A"
               variant="outlined"
+              value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               sx={{
                 my: 1,
@@ -288,6 +361,7 @@ const Authentication_Page = () => {
               label="Email"
               placeholder="example@email.com"
               variant="outlined"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               sx={{
                 my: 1,
@@ -316,10 +390,28 @@ const Authentication_Page = () => {
             />
             <TextField
               label="Mật Khẩu"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="123456..."
               variant="outlined"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: password && (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleTogglePassword}
+                      edge="end"
+                    >
+                      {showPassword ? (
+                        <IconVisibilityOff />
+                      ) : (
+                        <IconVisibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               sx={{
                 my: 1,
                 width: "100%",
@@ -347,6 +439,7 @@ const Authentication_Page = () => {
             />
             <Button
               variant="contained"
+              onClick={handleRegister}
               sx={{
                 mt: 2,
                 color: "var(--background-color)",
@@ -362,27 +455,31 @@ const Authentication_Page = () => {
               Đăng Ký
             </Button>
 
-            <Typography variant="body2" sx={{ mt: 2 }}>Hoặc tiếp tục với</Typography>
-            <Box >
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              Hoặc tiếp tục với
+            </Typography>
+            <Box>
               <IconButton
                 href="#"
                 sx={{
                   Width: "48px",
                   Height: "48px",
-                  mx:"10px"
+                  mx: "10px",
                 }}
               >
                 <img src={IconGoogle} alt="Icon Login Google" />
               </IconButton>
-              <IconButton href="#" sx={{
+              <IconButton
+                href="#"
+                sx={{
                   Width: "48px",
                   Height: "48px",
-                  mx:"10px"
-                }}>
+                  mx: "10px",
+                }}
+              >
                 <img src={IconFacebook} alt="Icon Login Facebook" />
               </IconButton>
             </Box>
-
           </Box>
 
           {/* Toggle Panel */}

@@ -17,7 +17,7 @@
 
 :root {
   --background-color: #F5F5F5;
-  --primary-text-color: #20262D;
+  --primary-text-color: #0A0A0A;
   --secondary-text-color: #fdfdfd;
   --primary-button-color: #5A4EFF;
   --primary-button-highlight-color: #6F74F0;
@@ -41,7 +41,7 @@
   --secondary-button-highlight-color: #6F74F0;
   --secondary-button-highlight-lighter-color:rgb(117, 122, 246);
   --header-nav-color: linear-gradient(120deg, #0a0a0a 0%, #282466 62%, #2c2771 67%, #373092 77%, #4037ac 85%, #483dc3 94%, #4c41d0 100%);
-  --special-color: #9f69ab;
+  --special-color: #c665dc;
   --secondary-special-color: #000000CC;
 }
 

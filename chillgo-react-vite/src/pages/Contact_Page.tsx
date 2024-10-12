@@ -153,7 +153,7 @@ const Contact_Page: React.FC = () => {
               }}
               gutterBottom
             >
-              <b>Phản Hồi Chúng Tôi</b>
+              <b>Phản Hồi Về Chillgo</b>
             </Typography>
             <Box display="flex" alignItems="center" mb={2}>
               <IconLocationOn
