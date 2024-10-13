@@ -17,8 +17,8 @@
 
 :root {
   --background-color: #F5F5F5;
-  --primary-text-color: #20262D;
-  --secondary-text-color: #ffffff66;
+  --primary-text-color: #0A0A0A;
+  --secondary-text-color: #eeeeee;
   --primary-button-color: #5A4EFF;
   --primary-button-highlight-color: #6F74F0;
   --secondary-button-color: #cdee00;
@@ -33,7 +33,7 @@
 [data-theme="dark"] {
   --background-color: #0A0A0A;
   --primary-text-color: #DFD9D2;
-  --secondary-text-color: #00000066;
+  --secondary-text-color: #2b2b2b;
   --primary-button-color: #CDEE00;
   --primary-button-highlight-color: #E2F4A6;
   --secondary-button-color: #5A4EFF;
@@ -41,7 +41,7 @@
   --secondary-button-highlight-color: #6F74F0;
   --secondary-button-highlight-lighter-color:rgb(117, 122, 246);
   --header-nav-color: linear-gradient(120deg, #0a0a0a 0%, #282466 62%, #2c2771 67%, #373092 77%, #4037ac 85%, #483dc3 94%, #4c41d0 100%);
-  --special-color: #EEA0FF;
+  --special-color: #c665dc;
   --secondary-special-color: #000000CC;
 }
 

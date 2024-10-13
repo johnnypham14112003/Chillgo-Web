@@ -161,10 +161,6 @@
 }
 
 @media (min-width: 641px) {
-    .site-footer {
-        margin-top: 20px
-    }
-
     .site-footer-inner {
         justify-content: space-between;
         padding-top: 3em;

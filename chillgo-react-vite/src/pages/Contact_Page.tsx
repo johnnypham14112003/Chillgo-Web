@@ -69,12 +69,12 @@ const Contact_Page: React.FC = () => {
       return;
     }
 
-    const templateParams ={
+    const templateParams = {
       from_email: email,
       subject: subject,
       message: message,
       "g-recaptcha-response": recaptchaToken,
-    }
+    };
     if (form.current) {
       setIsLoading(true);
       emailjs
@@ -153,7 +153,7 @@ const Contact_Page: React.FC = () => {
               }}
               gutterBottom
             >
-              <b>Phản Hồi Chúng Tôi</b>
+              <b>Phản Hồi Về Chillgo</b>
             </Typography>
             <Box display="flex" alignItems="center" mb={2}>
               <IconLocationOn
@@ -220,12 +220,24 @@ const Contact_Page: React.FC = () => {
                   sx={{
                     marginBottom: 2,
                     "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "var(--primary-text-color)",
+                      },
                       "&:hover fieldset": {
-                        borderColor: "#EEA0FF",
+                        borderColor: "var(--primary-button-color)",
                       },
                       "&.Mui-focused fieldset": {
                         borderColor: "#EEA0FF",
                       },
+                      "& input": {
+                        color: "var(--primary-text-color)", // Màu chữ trong TextField
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "var(--primary-text-color)", // Màu của label mặc định
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "var(--primary-text-color)", // Màu của label khi focus
                     },
                   }}
                 />
@@ -240,12 +252,24 @@ const Contact_Page: React.FC = () => {
                   sx={{
                     marginBottom: 2,
                     "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "var(--primary-text-color)",
+                      },
                       "&:hover fieldset": {
-                        borderColor: "#EEA0FF",
+                        borderColor: "var(--primary-button-color)",
                       },
                       "&.Mui-focused fieldset": {
                         borderColor: "#EEA0FF",
                       },
+                      "& input": {
+                        color: "var(--primary-text-color)", // Màu chữ trong TextField
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "var(--primary-text-color)", // Màu của label mặc định
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "var(--primary-text-color)", // Màu của label khi focus
                     },
                   }}
                 />
@@ -254,7 +278,6 @@ const Contact_Page: React.FC = () => {
                 <TextField
                   fullWidth
                   label="Nội Dung"
-                  multiline
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
@@ -262,12 +285,24 @@ const Contact_Page: React.FC = () => {
                   sx={{
                     marginBottom: 2,
                     "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "var(--primary-text-color)",
+                      },
                       "&:hover fieldset": {
-                        borderColor: "#EEA0FF",
+                        borderColor: "var(--primary-button-color)",
                       },
                       "&.Mui-focused fieldset": {
                         borderColor: "#EEA0FF",
                       },
+                      "& input": {
+                        color: "var(--primary-text-color)", // Màu chữ trong TextField
+                      },
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "var(--primary-text-color)", // Màu của label mặc định
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "var(--primary-text-color)", // Màu của label khi focus
                     },
                   }}
                 />

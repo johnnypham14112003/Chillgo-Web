@@ -1,39 +1,45 @@
 //Library
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import Checkbox from "@mui/material/Checkbox";
-import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+
+import IconVisibility from "@mui/icons-material/VisibilityRounded";
+import IconVisibilityOff from "@mui/icons-material/VisibilityOffRounded";
 
 //Components
 import { Header, Footer } from "../components/page layouts/Header_Footer";
 
+//Assets
+import IconFacebook from "../assets/images/facebook50px.png";
+import IconGoogle from "../assets/images/google48px.png";
+
+// URL server từ biến môi trường
+const Server_URL = import.meta.env.VITE_SERVER_URL;
+
+//=============================================================================================
 const Authentication_Page = () => {
+  
+  //---------------------[ Declare ]-----------------------------
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     //assign default value
     const savedTheme = localStorage.getItem("isDarkMode");
     return savedTheme === "true";
   });
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignup, setIsSignup] = useState<boolean>(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
+  // ----------------------------------------------------------------
   useEffect(() => {
     document.documentElement.setAttribute(
       "data-theme",
@@ -41,160 +47,489 @@ const Authentication_Page = () => {
     );
   }, [isDarkMode]);
 
-  const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleThemeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newTheme = event.target.checked;
     setIsDarkMode(newTheme);
     localStorage.setItem("isDarkMode", newTheme.toString());
   };
 
+  // ----------------------------------------------------------------
+  const handleToggleForm = () => {
+    setIsSignUp(!isSignUp);
+    setFullName("");
+    setEmail("");
+    setPassword("");
+    setShowPassword(false);
+  };
+
+  // ----------------------------------------------------------------
+  const handleTogglePassword = () => setShowPassword((show) => !show);
+
+  // ----------------------------------------------------------------
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // Thực hiện gọi API
+      const response = await fetch(`${Server_URL}/api/accounts/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "email": email,
+          "password": password,
+        }),
+      });
+
+      if (!response.ok) {
+        alert(`Đã có lỗi xảy ra: ${response.body}`);
+      }
+
+      const data = await response.json();
+
+      // Kiểm tra role trong response và chuyển hướng nếu cần
+      const role = data["account-info"].role;
+      if (role === "Admin" || role === "Nhân Viên") {
+        // Chuyển hướng đến trang Dashboard
+        navigate("/dashboard");
+      } else {
+        // Nếu role không phải là Admin hoặc Nhân Viên về homepage
+        navigate("/");
+      }
+    } catch (err) {
+      alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+    }
+  };
+
+  const handleRegister = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // Thực hiện gọi API
+      const response = await fetch(`${Server_URL}/api/accounts/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "full-name": fullName,
+          "email": email,
+          "password": password,
+        }),
+      });
+
+      if (!response.ok) {
+        alert(`Đã có lỗi xảy ra: ${response.body}`);
+      }
+
+      const data = await response.json();
+
+      // Kiểm tra role trong response và chuyển hướng nếu cần
+      const role = data["account-info"].role;
+      if (role === "Admin" || role === "Nhân Viên") {
+        // Chuyển hướng đến trang Dashboard
+        navigate("/dashboard");
+      } else {
+        // Nếu role không phải là Admin hoặc Nhân Viên về homepage
+        navigate("/");
+      }
+    } catch (err) {
+      alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+    }
+  };
+
+  // ----------------------------------------------------------------
   return (
     <div>
       <Header currentThemeMode={isDarkMode} onThemeChange={handleThemeChange} />
-      <main>
-        <Container
-          component={"section"}
-          maxWidth="xl"
-          className="container"
-          id="container"
+
+      <Container
+        sx={{
+          height: "90vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            borderRadius: "30px",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.35)",
+            width: "768px",
+            maxWidth: "100%",
+            minHeight: "530px",
+            overflow: "hidden",
+            position: "relative",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: isSignUp ? "flex-end" : "flex-start",
+          }}
         >
+          {/* Sign In Form */}
           <Box
-            className="form-container sign-up"
-            sx={{ display: "flex", flexDirection: "column" }}
+            sx={{
+              width: { xs: "70%", sm: "50%" },
+              padding: "40px",
+              display: { xs: isSignUp ? "none" : "flex", sm: "flex" },
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              backgroundColor: "var(--secondary-text-color)",
+            }}
           >
-            <form>
-              <h1>Create Account</h1>
-              <Box className="social-icons" sx={{ margin: "20px 0" }}>
-                <Typography
-                  component="a"
-                  href="#"
-                  sx={{
-                    color: "#333",
-                    fontSize: "13px",
-                    textDecoration: "none",
-                    border: "1px solid #ccc",
-                    borderRadius: "20%",
-                    display: "inline-flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: "0 3px",
-                    width: "40px",
-                    height: "40px",
-                  }}
-                >
-                  G
-                </Typography>
-                <Typography
-                  component="a"
-                  href="#"
-                  sx={{
-                    color: "#333",
-                    fontSize: "13px",
-                    textDecoration: "none",
-                    border: "1px solid #ccc",
-                    borderRadius: "20%",
-                    display: "inline-flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: "0 3px",
-                    width: "40px",
-                    height: "40px",
-                  }}
-                >
-                  F
-                </Typography>
-                <Typography
-                  component="a"
-                  href="#"
-                  sx={{
-                    color: "#333",
-                    fontSize: "13px",
-                    textDecoration: "none",
-                    border: "1px solid #ccc",
-                    borderRadius: "20%",
-                    display: "inline-flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: "0 3px",
-                    width: "40px",
-                    height: "40px",
-                  }}
-                >
-                  Git
-                </Typography>
-                <Typography
-                  component="a"
-                  href="#"
-                  sx={{
-                    color: "#333",
-                    fontSize: "13px",
-                    textDecoration: "none",
-                    border: "1px solid #ccc",
-                    borderRadius: "20%",
-                    display: "inline-flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    margin: "0 3px",
-                    width: "40px",
-                    height: "40px",
-                  }}
-                >
-                  Linkedin
-                </Typography>
-              </Box>
-              <span>or use your email for registeration</span>
-              <input type="text" placeholder="Name" />
-              <input type="email" placeholder="Email" />
-              <input type="password" placeholder="Password" />
-              <button>Sign Up</button>
-            </form>
+            <Typography variant="h5">
+              <b>Đăng Nhập</b>
+            </Typography>
+            <TextField
+              label="Email"
+              placeholder="example@gmail.com"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{
+                my: 1,
+                width: "100%",
+                color: "var(--primary-text-color)",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "var(--primary-text-color)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "var(--primary-button-color)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#EEA0FF",
+                  },
+                  "& input": {
+                    color: "var(--primary-text-color)", // Màu chữ trong TextField
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "var(--primary-text-color)", // Màu của label mặc định
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "var(--primary-text-color)", // Màu của label khi focus
+                },
+              }}
+            />
+            <TextField
+              label="Mật Khẩu"
+              type={showPassword ? "text" : "password"}
+              placeholder="123456..."
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: password && (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleTogglePassword}
+                      edge="end"
+                    >
+                      {showPassword ? (
+                        <IconVisibilityOff />
+                      ) : (
+                        <IconVisibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                my: 1,
+                width: "100%",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "var(--primary-text-color)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "var(--primary-button-color)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#EEA0FF",
+                  },
+                  "& input": {
+                    color: "var(--primary-text-color)", // Màu chữ trong TextField
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "var(--primary-text-color)", // Màu của label mặc định
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "var(--primary-text-color)", // Màu của label khi focus
+                },
+              }}
+            />
+            <Button href="#">Quên Mật Khẩu?</Button>
+
+            <Button
+              variant="contained"
+              onClick={handleLogin}
+              sx={{
+                my: 2,
+                color: "var(--background-color)",
+                backgroundColor: "var(--primary-button-color)",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: 4,
+                  backgroundColor: "var(--secondary-button-color)",
+                  color: "var(--primary-text-color)",
+                },
+              }}
+            >
+              Đăng nhập ngay
+            </Button>
+
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              Hoặc tiếp tục với
+            </Typography>
+            <Box>
+              <IconButton
+                href="#"
+                sx={{
+                  Width: "48px",
+                  Height: "48px",
+                  mx: "10px",
+                }}
+              >
+                <img src={IconGoogle} alt="Icon Login Google" />
+              </IconButton>
+              <IconButton
+                href="#"
+                sx={{
+                  Width: "48px",
+                  Height: "48px",
+                  mx: "10px",
+                }}
+              >
+                <img src={IconFacebook} alt="Icon Login Facebook" />
+              </IconButton>
+            </Box>
           </Box>
-          <Box className="form-container sign-in">
-            <form>
-              <h1>Sign In</h1>
-              <div className="social-icons">
-                <a href="#" className="icon">
-                  <i className="fa-brands fa-google-plus-g"></i>
-                </a>
-                <a href="#" className="icon">
-                  <i className="fa-brands fa-facebook-f"></i>
-                </a>
-                <a href="#" className="icon">
-                  <i className="fa-brands fa-github"></i>
-                </a>
-                <a href="#" className="icon">
-                  <i className="fa-brands fa-linkedin-in"></i>
-                </a>
-              </div>
-              <span>or use your email password</span>
-              <input type="email" placeholder="Email" />
-              <input type="password" placeholder="Password" />
-              <a href="#">Forget Your Password?</a>
-              <button>Sign In</button>
-            </form>
+
+          {/* Sign Up Form */}
+          <Box
+            sx={{
+              width: { xs: "70%", sm: "50%" },
+              padding: "40px",
+              display: { xs: isSignUp ? "flex" : "none", sm: "flex" },
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              backgroundColor: "var(--secondary-text-color)",
+            }}
+          >
+            <Typography variant="h5">
+              <b>Tạo Tài Khoản</b>
+            </Typography>
+            <TextField
+              label="Họ Và Tên"
+              placeholder="Nguyễn Văn A"
+              variant="outlined"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              sx={{
+                my: 1,
+                width: "100%",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "var(--primary-text-color)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "var(--primary-button-color)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#EEA0FF",
+                  },
+                  "& input": {
+                    color: "var(--primary-text-color)", // Màu chữ trong TextField
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "var(--primary-text-color)", // Màu của label mặc định
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "var(--primary-text-color)", // Màu của label khi focus
+                },
+              }}
+            />
+            <TextField
+              label="Email"
+              placeholder="example@email.com"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              sx={{
+                my: 1,
+                width: "100%",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "var(--primary-text-color)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "var(--primary-button-color)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#EEA0FF",
+                  },
+                  "& input": {
+                    color: "var(--primary-text-color)", // Màu chữ trong TextField
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "var(--primary-text-color)", // Màu của label mặc định
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "var(--primary-text-color)", // Màu của label khi focus
+                },
+              }}
+            />
+            <TextField
+              label="Mật Khẩu"
+              type={showPassword ? "text" : "password"}
+              placeholder="123456..."
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                endAdornment: password && (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleTogglePassword}
+                      edge="end"
+                    >
+                      {showPassword ? (
+                        <IconVisibilityOff />
+                      ) : (
+                        <IconVisibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                my: 1,
+                width: "100%",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "var(--primary-text-color)",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "var(--primary-button-color)",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#EEA0FF",
+                  },
+                  "& input": {
+                    color: "var(--primary-text-color)", // Màu chữ trong TextField
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "var(--primary-text-color)", // Màu của label mặc định
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "var(--primary-text-color)", // Màu của label khi focus
+                },
+              }}
+            />
+            <Button
+              variant="contained"
+              onClick={handleRegister}
+              sx={{
+                mt: 2,
+                color: "var(--background-color)",
+                backgroundColor: "var(--primary-button-color)",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: 4,
+                  backgroundColor: "var(--secondary-button-color)",
+                  color: "var(--primary-text-color)",
+                },
+              }}
+            >
+              Đăng Ký
+            </Button>
+
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              Hoặc tiếp tục với
+            </Typography>
+            <Box>
+              <IconButton
+                href="#"
+                sx={{
+                  Width: "48px",
+                  Height: "48px",
+                  mx: "10px",
+                }}
+              >
+                <img src={IconGoogle} alt="Icon Login Google" />
+              </IconButton>
+              <IconButton
+                href="#"
+                sx={{
+                  Width: "48px",
+                  Height: "48px",
+                  mx: "10px",
+                }}
+              >
+                <img src={IconFacebook} alt="Icon Login Facebook" />
+              </IconButton>
+            </Box>
           </Box>
-          <div className="toggle-container">
-            <div className="toggle">
-              <div className="toggle-panel toggle-left">
-                <h1>Welcome Back!</h1>
-                <p>Enter your personal details to use all of site features</p>
-                <button className="hidden" id="login">
-                  Sign In
-                </button>
-              </div>
-              <div className="toggle-panel toggle-right">
-                <h1>Hello, Friend!</h1>
-                <p>
-                  Register with your personal details to use all of site
-                  features
-                </p>
-                <button className="hidden" id="register">
-                  Sign Up
-                </button>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </main>
+
+          {/* Toggle Panel */}
+          <Box
+            sx={{
+              width: { xs: "30%", sm: "50%" },
+              position: "absolute",
+              top: 0,
+              right: 0,
+              height: "100%",
+              zIndex: 1,
+              backgroundImage: "var(--header-nav-color)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+              transition: {
+                xs: "transform 0.15s ease-in-out",
+                sm: "transform 0.6s ease-in-out",
+              },
+              transform: {
+                xs: isSignUp ? "translateX(-234%)" : "translateX(0)",
+                sm: isSignUp ? "translateX(-100%)" : "translateX(0)",
+              },
+            }}
+          >
+            <Box sx={{ textAlign: "center" }}>
+              <Typography variant="h5">
+                {isSignUp ? "Xin Chào!" : "Chào Mừng Trở Lại!"}
+              </Typography>
+              <Typography sx={{ my: 4, mx: 5 }}>
+                {isSignUp
+                  ? "Nếu bạn đã có tài khoản thì có thể đăng nhập ngay"
+                  : "Nếu bạn chưa có tài khoản thì có thể tạo tài khoản mới"}
+              </Typography>
+              <Button
+                onClick={handleToggleForm}
+                sx={{
+                  mt: 1,
+                  fontSize: 22,
+                  color: "#cdee00",
+                }}
+              >
+                <b>{isSignUp ? "Đăng Nhập" : "Đăng Ký"}</b>
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Container>
+
       <Footer currentThemeMode={isDarkMode} />
     </div>
   );
