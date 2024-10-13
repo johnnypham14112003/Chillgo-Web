@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+// import { lazy, Suspense } from "react";
 
 //Library
 import { useState, useEffect, ChangeEvent } from "react";

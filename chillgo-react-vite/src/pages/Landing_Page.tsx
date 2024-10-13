@@ -100,7 +100,7 @@ const Landing_Page = () => {
     },
   }));
 
-  const handleChange =
+  const handleChangeTab =
     (panelName: string) => (_event: SyntheticEvent, newExpanded: boolean) => {
       setExpandedAccordion(newExpanded ? panelName : false);
       setSelectedAccordion(panelName);
@@ -725,7 +725,7 @@ const Landing_Page = () => {
                 <Accordion
                   defaultExpanded
                   expanded={expandedAccordion === "explore_tab"}
-                  onChange={handleChange("explore_tab")}
+                  onChange={handleChangeTab("explore_tab")}
                 >
                   <AccordionSummary
                     id="explore-header"
@@ -779,7 +779,7 @@ const Landing_Page = () => {
 
                 <Accordion
                   expanded={expandedAccordion === "plan_tab"}
-                  onChange={handleChange("plan_tab")}
+                  onChange={handleChangeTab("plan_tab")}
                 >
                   <AccordionSummary
                     id="plan_tab-header"
@@ -828,7 +828,7 @@ const Landing_Page = () => {
 
                 <Accordion
                   expanded={expandedAccordion === "AI_tab"}
-                  onChange={handleChange("AI_tab")}
+                  onChange={handleChangeTab("AI_tab")}
                 >
                   <AccordionSummary
                     id="AI_tab-header"
@@ -877,7 +877,7 @@ const Landing_Page = () => {
 
                 <Accordion
                   expanded={expandedAccordion === "voucher_tab"}
-                  onChange={handleChange("voucher_tab")}
+                  onChange={handleChangeTab("voucher_tab")}
                 >
                   <AccordionSummary
                     id="voucher_tab-header"
@@ -925,7 +925,7 @@ const Landing_Page = () => {
 
                 <Accordion
                   expanded={expandedAccordion === "paycart_tab"}
-                  onChange={handleChange("paycart_tab")}
+                  onChange={handleChangeTab("paycart_tab")}
                 >
                   <AccordionSummary
                     id="paycart_tab-header"
