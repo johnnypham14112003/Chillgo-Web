@@ -103,7 +103,7 @@ const Pricing_Page = () => {
                 className="mt-8 grid grid-cols-1 gap-4 text-sm leading-6 sm:grid-cols-2 sm:gap-6"
                 style={{ color: "var(--primary-text-color)" }}
               >
-                <li className="flex gap-x-3">Trò chuyện không giới hạn với AI</li>
+                <li className="flex gap-x-3">Trò chuyện không giới hạn</li>
                 <li className="flex gap-x-3">Đề xuất hoạt động cá nhân hóa</li>
                 <li className="flex gap-x-3">
                   Ưu tiên hỗ trợ từ đội ngũ chăm sóc khách hàng

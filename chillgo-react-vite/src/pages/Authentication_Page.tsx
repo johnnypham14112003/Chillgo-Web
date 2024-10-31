@@ -69,38 +69,37 @@ const Authentication_Page = () => {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-    // try {
-    //   // Thực hiện gọi API
-    //   const response = await fetch(`${Server_URL}/api/accounts/login`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       "email": email,
-    //       "password": password,
-    //     }),
-    //   });
+    try {
+      // Thực hiện gọi API
+      const response = await fetch(`${Server_URL}/api/accounts/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "email": email,
+          "password": password,
+        }),
+      });
 
-    //   if (!response.ok) {
-    //     alert(`Đã có lỗi xảy ra: ${response.body}`);
-    //   }
+      if (!response.ok) {
+        alert(`Đã có lỗi xảy ra: ${response.body}`);
+      }
 
-    //   const data = await response.json();
+      const data = await response.json();
 
-    //   // Kiểm tra role trong response và chuyển hướng nếu cần
-    //   const role = data["account-info"].role;
-    //   if (role === "Admin" || role === "Nhân Viên") {
-    //     // Chuyển hướng đến trang Dashboard
-    //     navigate("/dashboard");
-    //   } else {
-    //     // Nếu role không phải là Admin hoặc Nhân Viên về homepage
-    //     navigate("/");
-    //   }
-    // } catch (err) {
-    //   alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
-    // }
-    navigate("/dashboard");
+      // Kiểm tra role trong response và chuyển hướng nếu cần
+      const role = data["account-info"].role;
+      if (role === "Admin" || role === "Nhân Viên") {
+        // Chuyển hướng đến trang Dashboard
+        navigate("/dashboard");
+      } else {
+        // Nếu role không phải là Admin hoặc Nhân Viên về homepage
+        navigate("/");
+      }
+    } catch (err) {
+      alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+    }
   };
 
   const handleRegister = async (e: FormEvent) => {
