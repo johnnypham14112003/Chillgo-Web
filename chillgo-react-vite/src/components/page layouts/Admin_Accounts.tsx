@@ -1,13 +1,13 @@
 // src/pages/AdminCustomer.tsx
 
 import React, { useMemo, useState } from "react";
-import { useGetProfile } from "../hooks/useGetProfile"; // Adjust the import path
-import { useGetAllAccount } from "../hooks/useGetProfile"; // Adjust the import path
+import { useGetProfile } from "../../hooks/useGetProfile"; // Adjust the import path
+import { useGetAllAccount } from "../../hooks/useGetProfile"; // Adjust the import path
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { Image, Pagination, PaginationProps } from "antd";
 import { IoSearchOutline } from "react-icons/io5";
-import { Customer } from "../data/types";
+import { Customer } from "../../data/types";
 
 const AdminCustomer: React.FC = () => {
   // Fetch user profile data using the mock hook

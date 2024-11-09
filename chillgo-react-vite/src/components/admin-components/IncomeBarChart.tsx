@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { formatMoney } from "../utils";
+import FormatMoney from "../utils/Format_Money";
 import { useGetMonthlyIncomeData } from "../../data/admin";
 
 ChartJS.register(LinearScale, CategoryScale, BarElement, Tooltip, Legend);
@@ -106,7 +106,7 @@ const IncomeBarChart: React.FC<IncomeBarChartProps> = ({ token }) => {
           beginAtZero: true,
           ticks: {
             stepSize: 1000000,
-            callback: (value: number) => formatMoney(value),
+            callback: (value: number) => FormatMoney(value),
           },
         },
       },
@@ -122,9 +122,9 @@ const IncomeBarChart: React.FC<IncomeBarChartProps> = ({ token }) => {
               const monthData = context.parsed.y;
               const weeks = chartData.weeklyData[index] || [];
 
-              const lines = [`${month}: ${formatMoney(monthData)}`];
+              const lines = [`${month}: ${FormatMoney(monthData)}`];
               weeks.forEach((weekValue: number, weekIndex: number) => {
-                lines.push(`Tuần ${weekIndex + 1}: ${formatMoney(weekValue)}`);
+                lines.push(`Tuần ${weekIndex + 1}: ${FormatMoney(weekValue)}`);
               });
               return lines;
             },

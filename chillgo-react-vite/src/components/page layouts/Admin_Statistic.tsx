@@ -2,14 +2,14 @@
 import React, { useState } from "react";
 // import { useGetDashboardData } from "../hooks/useGetDashboardData";
 // import { useGetProfile } from "../hooks/useGetProfile";
-import CustomerDisplay from "../components/Admin/CustomerDisplay";
-import IncomeBarChart from "../components/Admin/IncomeBarChart";
-import IncomeDisplay from "../components/Admin/IncomeDisplay";
-import OrderDisplay from "../components/Admin/OderDisplay,";
-import ProductDisplay from "../components/Admin/ProductDisplay";
-import CommissionDisplay from "../components/Admin/CommissionDisplay";
-import WebsiteDisplay from "../components/Admin/WebsiteDisplay";
-import { useGetDashboardData } from "../data/admin";
+import CustomerDisplay from "../admin-components/CustomerDisplay";
+import IncomeBarChart from "../admin-components/IncomeBarChart";
+import IncomeDisplay from "../admin-components/IncomeDisplay";
+import OrderDisplay from "../admin-components/OderDisplay,";
+import ProductDisplay from "../admin-components/ProductDisplay";
+import CommissionDisplay from "../admin-components/CommissionDisplay";
+import WebsiteDisplay from "../admin-components/WebsiteDisplay";
+import { useGetDashboardData } from "../../data/admin";
 
 const AdminDashboard: React.FC = () => {
   // Fetch user profile data
