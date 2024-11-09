@@ -13,16 +13,16 @@ import FAQS_Page from "./pages/FAQS_Page";
 import Authentication_Page from "./pages/Authentication_Page";
 import Dashboard_Page from "./pages/Dashboard_Page";
 import NotFound_Page from "./pages/NotFound_Page";
-
+import AdminCustomer from "./components/admin.customer";
 //Import styles
 import "../src/styles/Web_Environment.css";
-
+import AdminDashboard from "./components/statistic";
 
 const theme = createTheme({
   typography: {
     allVariants: {
       fontFamily: "'Montserrat', sans-serif",
-      color: "var(--primary-text-color)"
+      color: "var(--primary-text-color)",
     },
   },
   components: {
@@ -30,11 +30,11 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontWeight: 400,
-          color: "var(--primary-text-color)"
+          color: "var(--primary-text-color)",
         },
       },
     },
-  }
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -49,7 +49,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/contact" element={<Contact_Page />} />
           <Route path="/faqs" element={<FAQS_Page />} />
           <Route path="/authentication" element={<Authentication_Page />} />
-          <Route path="/dashboard" element={<Dashboard_Page />} />
+          <Route path="/admin" element={<Dashboard_Page />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/customer" element={<AdminCustomer />} />
+          </Route>
           <Route path="*" element={<NotFound_Page />} />
         </Routes>
       </BrowserRouter>

@@ -5,6 +5,9 @@ import { useState, useEffect, ChangeEvent } from "react";
 
 //Components
 import { Header, Footer } from "../components/page layouts/Header_Footer";
+import AdminHeader from "../components/adminheader";
+import AdminSidebar from "../components/adminsidebar";
+import { Outlet } from "react-router-dom";
 
 //=============================================================================================
 const Dashboard_Page = () => {
@@ -33,12 +36,13 @@ const Dashboard_Page = () => {
   // ----------------------------------------------------------------
 
   return (
-    <div>
-      {/* <Suspense fallback={}>
-      </Suspense> */}
-      <Header currentThemeMode={isDarkMode} onThemeChange={handleThemeChange} />
-      <Footer currentThemeMode={isDarkMode} />
-    </div>
+    <>
+      <AdminHeader />
+      <div className="flex h-screen max-h-screen">
+        <AdminSidebar className="w-[300px] h-full bg-[#0055C3] flex flex-col justify-between" />
+        <Outlet />
+      </div>
+    </>
   );
 };
 
