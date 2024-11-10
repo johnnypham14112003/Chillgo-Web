@@ -1,4 +1,4 @@
-const FormatMoney = (amount: number) => {
+const Format_Money = (amount: number) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
@@ -6,4 +6,4 @@ const FormatMoney = (amount: number) => {
   }).format(amount);
 };
 
-export default FormatMoney;
+export default Format_Money;

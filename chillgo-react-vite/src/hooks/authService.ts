@@ -5,7 +5,6 @@ import {
   SignupPayload,
 } from "../data/types";
 
-//==========================================================
 //=====================[ Declare ]======================
 const Server_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -18,7 +17,6 @@ export const setToken = (token: string) => {
 export const getToken = (): string | null => {
   return localStorage.getItem("jwt-token");
 };
-//==========================================================
 
 // Lưu thông tin account vào localStorage
 export const setAccountInfo = (accountInfo: AccountInfo) => {
@@ -36,6 +34,7 @@ export const clearAuth = () => {
   localStorage.removeItem("jwt-token");
   localStorage.removeItem("account-info");
 };
+//==========================================================
 
 // Hàm signup
 export const signupFetch = async (

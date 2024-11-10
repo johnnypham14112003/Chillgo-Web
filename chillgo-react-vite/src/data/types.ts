@@ -28,6 +28,33 @@ export interface LoginResponse {
 }
 
 // ====================================================================================
+export interface AccountStatsResponse {
+  "sum-account": number;
+    "sum-customer": number;
+    "sum-partner": number;
+    "sum-staff": number;
+    "sum-deleted": number;
+}
+
+export interface PaymentMethodStats {
+  "transfer": number;
+  "cash": number;
+}
+
+export interface TransactionStatsResponse {
+  "total-transactions": number,
+    "total-amount": number,
+    "payment-method-stats": PaymentMethodStats
+}
+
+export interface MonthlyChartData {
+  month: string;
+  transactions: number;
+  amount: number;
+}
+
+
+
 export interface Customer {
   accountId: string;
   name: string;
