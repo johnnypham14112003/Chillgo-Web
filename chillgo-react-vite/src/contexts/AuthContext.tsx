@@ -1,85 +1,53 @@
-//Library
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-  FC,
-} from "react";
-import { User, onAuthStateChanged, getIdToken } from "firebase/auth";
-import { auth } from "../firebase.config";
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { AccountInfo } from '../data/types';
+import { getToken, getAccountInfo } from '../hooks/authService';
 
-//====================================================================
-//Public Declare
-type Role = 'Admin' | 'Nhân Viên Quản Lý' | 'Đối Tác' | 'Hướng Dẫn Viên' | 'Người Dùng' | null;
 interface AuthContextType {
-  user: User | null;
-  idToken: string | null;
-  role: Role;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  isAuthenticated: boolean;
+  accountInfo: AccountInfo | null;
+  login: (accountInfo: AccountInfo) => void;
+  logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  idToken: null,
-  role: null,
-  login: async () => {},
-  signup: async () => {},
-  logout: async () => {},
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-//====================================================================
-//Public Function
-export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [idToken, setIdToken] = useState<string | null>(null);
-  const [role, setRole] = useState<Role>(null);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
 
-   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        const token = await getIdToken(currentUser);
-        setIdToken(token);
-        // Giả sử bạn lưu role trong user claims hoặc trong một nơi khác
-        // Ở đây bạn cần thực hiện logic để lấy role thực tế của user
-        const userRole = await fetchUserRole(currentUser.uid);
-        setRole(userRole);
-      } else {
-        setIdToken(null);
-        setRole(null);
-      }
-    });
-
-    return () => unsubscribe();
+  useEffect(() => {
+    // Kiểm tra authentication khi component mount
+    const token = getToken();
+    const storedAccountInfo = getAccountInfo();
+    
+    if (token && storedAccountInfo) {
+      setIsAuthenticated(true);
+      setAccountInfo(storedAccountInfo);
+    }
   }, []);
 
-  const login = async (email: string, password: string) => {
-    // Implement login logic
+  const login = (newAccountInfo: AccountInfo) => {
+    setIsAuthenticated(true);
+    setAccountInfo(newAccountInfo);
   };
 
-  const signup = async (email: string, password: string) => {
-    // Implement signup logic
-  };
-
-  const logout = async () => {
-    // Implement logout logic
+  const logout = () => {
+    localStorage.clear();
+    setIsAuthenticated(false);
+    setAccountInfo(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, idToken, role, login, signup, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, accountInfo, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
-
-// Hàm này cần được implement để lấy role của user từ backend hoặc Firebase
-async function fetchUserRole(uid: string): Promise<Role> {
-  // Implement logic to fetch user role
-  return 'User';
-}
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

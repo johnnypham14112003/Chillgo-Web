@@ -12,14 +12,15 @@ import Contact_Page from "./pages/Contact_Page";
 import FAQS_Page from "./pages/FAQS_Page";
 import Authentication_Page from "./pages/Authentication_Page";
 import NotFound_Page from "./pages/NotFound_Page";
-import Dashboard_Page from "./pages/Dashboard_Page";
+import Dashboard_Page from "./pages/Admin_Page";
 import AdminCustomer from "./components/page layouts/Admin_Accounts";
-import AdminDashboard from "./components/page layouts/Admin_Statistic";
+import AdminDashboard from "./components/page layouts/Admin_Dashboard";
 
 //Import styles
 import "../src/styles/Web_Environment.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ProtectedRoute } from "./components/utils/ProtectedRoute";
 
 //====================================================================
 //Public Declare
@@ -57,7 +58,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="/contact" element={<Contact_Page />} />
             <Route path="/faqs" element={<FAQS_Page />} />
             <Route path="/authentication" element={<Authentication_Page />} />
-            <Route path="/admin" element={<Dashboard_Page />}>
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute allowedRoles={["Admin", "Nhân Viên Quản Lý"]}>
+                  <Dashboard_Page />
+                </ProtectedRoute>
+              }
+            >
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/accounts" element={<AdminCustomer />} />
             </Route>

@@ -20,8 +20,9 @@ import { Header, Footer } from "../components/page layouts/Header_Footer";
 import IconFacebook from "../assets/images/facebook50px.png";
 import IconGoogle from "../assets/images/google48px.png";
 
-// URL server từ biến môi trường
-const Server_URL = import.meta.env.VITE_SERVER_URL;
+//Context
+import { useAuth } from "../contexts/AuthContext";
+import { loginMethod } from "../hooks/authService";
 
 //=============================================================================================
 const Authentication_Page = () => {
@@ -32,6 +33,7 @@ const Authentication_Page = () => {
     const savedTheme = localStorage.getItem("isDarkMode");
     return savedTheme === "true";
   });
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -69,37 +71,20 @@ const Authentication_Page = () => {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-    try {
-      // Thực hiện gọi API
-      const response = await fetch(`${Server_URL}/api/accounts/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          "email": email,
-          "password": password,
-        }),
-      });
-
-      if (!response.ok) {
-        alert(`Đã có lỗi xảy ra: ${response.body}`);
+      try {
+        const response = await loginMethod({ email, password });
+        login(response['account-info']);
+        
+        // Chuyển hướng dựa vào role
+        if (['Admin', 'Nhân Viên Quản Lý'].includes(response['account-info'].role)) {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      } catch (error) {
+        console.error('Login failed:', error);
+        alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
       }
-
-      const data = await response.json();
-
-      // Kiểm tra role trong response và chuyển hướng nếu cần
-      const role = data["account-info"].role;
-      if (role === "Admin" || role === "Nhân Viên") {
-        // Chuyển hướng đến trang Dashboard
-        navigate("/dashboard");
-      } else {
-        // Nếu role không phải là Admin hoặc Nhân Viên về homepage
-        navigate("/");
-      }
-    } catch (err) {
-      alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
-    }
   };
 
   const handleRegister = async (e: FormEvent) => {
@@ -107,7 +92,7 @@ const Authentication_Page = () => {
 
     try {
       // Thực hiện gọi API
-      const response = await fetch(`${Server_URL}/api/accounts/register`, {
+      const response = await fetch(`/api/accounts/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

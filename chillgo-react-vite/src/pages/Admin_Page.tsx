@@ -1,10 +1,10 @@
-// import { lazy, Suspense } from "react";
-
 //Library
 import { useState, useEffect, ChangeEvent } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import Typography from "@mui/material/Typography";
+import MenuList from "@mui/material/MenuList";
+import MenuItem from "@mui/material/MenuItem";
 
 //Asset
 import Chillgo_LogoLight from "../assets/images/logo/logo-light-theme.png";
@@ -12,19 +12,23 @@ import Chillgo_LogoDark from "../assets/images/logo/logo-dark-theme.png";
 
 //Components
 import { ButtonToggleTheme } from "../components/buttons/Button_Toggle_Theme";
+import { useAuth } from "../contexts/AuthContext";
 
 //=============================================================================================
-const Dashboard_Page = () => {
+const Admin_Page = () => {
   //---------------------[ Declare ]-----------------------------
-  //const Users = lazy(() => import ("../components/fetchData/User_List"));
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     //assign default value
     const savedTheme = localStorage.getItem("isDarkMode");
     return savedTheme === "true";
   });
   const location = useLocation();
+  const navigate = useNavigate();
   // Kiểm tra nếu URL hiện tại là "/admin" (không có child route nào)
   const isAtAdminRoot = location.pathname === "/admin";
+
+  //For Authentication
+  const { isAuthenticated, accountInfo, logout } = useAuth();
 
   const navBar = [
     {
@@ -52,7 +56,15 @@ const Dashboard_Page = () => {
   };
 
   // ----------------------------------------------------------------
+  const handleLandingPage = () => {
+    navigate("/");
+  };
+  const handleLogout = () => {
+    logout();
+    navigate("/authentication");
+  };
 
+  // ----------------------------------------------------------------
   return (
     <>
       <header className="absolute top-0 w-full z-10 bg-chillgo-secondary-text pb-2">
@@ -73,8 +85,7 @@ const Dashboard_Page = () => {
                 className="w-[51px] h-[51px] rounded-full object-cover"
               />
               <span className="text-chillgo-primary-text font-semibold text-base">
-                HoangPham
-                {/* {profile.data?.detail.name} */}
+                {accountInfo?.["full-name"]}
               </span>
             </div>
 
@@ -132,21 +143,35 @@ const Dashboard_Page = () => {
             ))}
           </nav>
           <div className="h-full pb-12 pl-12 flex items-end">
-            <div className="flex flex-col space-y-2">
-              <Link
-                to="/home"
-                className="flex text-white text-base hover:no-underline hover:bg-chillgo-special-color rounded-full p-1"
+            <MenuList className="flex flex-col space-y-2">
+              <MenuItem
+                onClick={handleLandingPage}
+                className="flex self-center"
+                sx={{
+                  borderRadius: "50px",
+                  color: "#fff",
+                  "&:hover": {
+                    backgroundColor: "var(--special-color)",
+                  },
+                }}
               >
                 Về trang Landing
-              </Link>
+              </MenuItem>
 
-              <Link
-                to="/logout"
-                className="flex text-white text-base hover:no-underline hover:bg-chillgo-special-color rounded-full p-1"
+              <MenuItem
+                onClick={handleLogout}
+                className="flex self-center"
+                sx={{
+                  borderRadius: "50px",
+                  color: "#fff",
+                  "&:hover": {
+                    backgroundColor: "var(--special-color)",
+                  },
+                }}
               >
-                Đăng xuất
-              </Link>
-            </div>
+                Đăng Xuất
+              </MenuItem>
+            </MenuList>
           </div>
         </div>
 
@@ -174,4 +199,4 @@ const Dashboard_Page = () => {
   );
 };
 
-export default Dashboard_Page;
+export default Admin_Page;

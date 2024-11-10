@@ -11,8 +11,10 @@ interface ButtonKeyboard3d_Vars {
 }
 
 //Public Function
-export const ButtonKeyboard3d: FC<ButtonKeyboard3d_Vars> = ({
+const ButtonKeyboard3d: FC<ButtonKeyboard3d_Vars> = ({
   textDisplay,
 }) => {
   return <button className="button-keyboard-animation">{textDisplay}</button>;
 };
+
+export default ButtonKeyboard3d;
