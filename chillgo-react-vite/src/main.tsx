@@ -20,7 +20,7 @@ import AdminDashboard from "./components/page layouts/Admin_Dashboard";
 import "../src/styles/Web_Environment.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { ProtectedRoute } from "./components/utils/ProtectedRoute";
+import Protected_Route from "./components/utils/Protected_Route";
 
 //====================================================================
 //Public Declare
@@ -61,9 +61,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route
               path="/admin"
               element={
-                <ProtectedRoute allowedRoles={["Admin", "Nhân Viên Quản Lý"]}>
+                <Protected_Route allowedRoles={["Admin", "Nhân Viên Quản Lý"]}>
                   <Dashboard_Page />
-                </ProtectedRoute>
+                </Protected_Route>
               }
             >
               <Route path="/admin/dashboard" element={<AdminDashboard />} />

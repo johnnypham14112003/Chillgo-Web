@@ -1,6 +1,6 @@
 //Library
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -9,12 +9,19 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 
 import IconVisibility from "@mui/icons-material/VisibilityRounded";
 import IconVisibilityOff from "@mui/icons-material/VisibilityOffRounded";
 
 //Components
 import { Header, Footer } from "../components/page layouts/Header_Footer";
+import {
+  validateEmail,
+  validatePassword,
+  validateFullName,
+} from "../components/utils/Form_Validation";
 
 //Assets
 import IconFacebook from "../assets/images/facebook50px.png";
@@ -22,24 +29,71 @@ import IconGoogle from "../assets/images/google48px.png";
 
 //Context
 import { useAuth } from "../contexts/AuthContext";
-import { loginMethod } from "../hooks/authService";
+import { loginFetch, signupFetch } from "../hooks/authService";
 
 //=============================================================================================
 const Authentication_Page = () => {
-  
   //---------------------[ Declare ]-----------------------------
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     //assign default value
     const savedTheme = localStorage.getItem("isDarkMode");
     return savedTheme === "true";
   });
-  const { login } = useAuth();
+  const { loginHandle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [fullNameError, setFullNameError] = useState("");
+
+  // Alert state
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, open: false });
+  };
+
+  const validateForm = (): boolean => {
+    let isValid = true;
+
+    // Reset errors
+    setEmailError("");
+    setPasswordError("");
+    setFullNameError("");
+
+    // Validate email
+    if (!validateEmail(email)) {
+      setEmailError("Email không hợp lệ");
+      isValid = false;
+    }
+
+    // Validate password
+    if (!validatePassword(password)) {
+      setPasswordError("Mật khẩu phải có ít nhất 6 ký tự");
+      isValid = false;
+    }
+
+    // Validate full name for signup
+    if (isSignUp && !validateFullName(fullName)) {
+      setFullNameError("Họ tên phải có ít nhất 2 ký tự");
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
+  // Lấy route muốn redirect về sau khi login
+  const from = (location.state as { from?: Location })?.from?.pathname || "/";
 
   // ----------------------------------------------------------------
   useEffect(() => {
@@ -62,6 +116,11 @@ const Authentication_Page = () => {
     setEmail("");
     setPassword("");
     setShowPassword(false);
+
+    // Reset errors
+    setEmailError("");
+    setPasswordError("");
+    setFullNameError("");
   };
 
   // ----------------------------------------------------------------
@@ -71,56 +130,68 @@ const Authentication_Page = () => {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
 
-      try {
-        const response = await loginMethod({ email, password });
-        login(response['account-info']);
-        
-        // Chuyển hướng dựa vào role
-        if (['Admin', 'Nhân Viên Quản Lý'].includes(response['account-info'].role)) {
-          navigate('/admin');
-        } else {
-          navigate('/');
-        }
-      } catch (error) {
-        console.error('Login failed:', error);
-        alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+    if (!validateForm()) return;
+
+    try {
+      const response = await loginFetch({ email, password });
+      loginHandle(response["account-info"]);
+
+      setAlert({
+        open: true,
+        message: "Đăng nhập thành công!",
+        severity: "success",
+      });
+
+      // Chuyển hướng dựa vào role
+      if (
+        ["Admin", "Nhân Viên Quản Lý"].includes(response["account-info"].role)
+      ) {
+        // navigate('/admin');
+        navigate(from === "/authentication" ? "/admin/dashboard" : from);
+      } else {
+        navigate("/");
       }
+    } catch (error) {
+      console.error("Login failed:", error);
+      setAlert({
+        open: true,
+        message: "Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.",
+        severity: "error",
+      });
+    }
   };
 
   const handleRegister = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (!validateForm()) return;
+
     try {
-      // Thực hiện gọi API
-      const response = await fetch(`/api/accounts/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          "full-name": fullName,
-          "email": email,
-          "password": password,
-        }),
+      await signupFetch({
+        "full-name": fullName,
+        email,
+        password,
       });
 
-      if (!response.ok) {
-        alert(`Đã có lỗi xảy ra: ${response.body}`);
-      }
+      setAlert({
+        open: true,
+        message: "Đăng ký thành công! Vui lòng đăng nhập.",
+        severity: "success",
+      });
 
-      const data = await response.json();
+      // Switch to login form after successful registration
+      setIsSignUp(false);
 
-      // Kiểm tra role trong response và chuyển hướng nếu cần
-      const role = data["account-info"].role;
-      if (role === "Admin" || role === "Nhân Viên") {
-        // Chuyển hướng đến trang Dashboard
-        navigate("/dashboard");
-      } else {
-        // Nếu role không phải là Admin hoặc Nhân Viên về homepage
-        navigate("/");
-      }
-    } catch (err) {
-      alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+      // Reset form
+      setFullName("");
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: "Đăng ký thất bại. Email có thể đã được sử dụng.",
+        severity: "error",
+      });
     }
   };
 
@@ -173,6 +244,8 @@ const Authentication_Page = () => {
               variant="outlined"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              error={!!emailError}
+              helperText={emailError}
               sx={{
                 my: 1,
                 width: "100%",
@@ -206,6 +279,8 @@ const Authentication_Page = () => {
               variant="outlined"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={!!passwordError}
+              helperText={passwordError}
               InputProps={{
                 endAdornment: password && (
                   <InputAdornment position="end">
@@ -317,6 +392,8 @@ const Authentication_Page = () => {
               variant="outlined"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
+              error={!!fullNameError}
+              helperText={fullNameError}
               sx={{
                 my: 1,
                 width: "100%",
@@ -348,6 +425,8 @@ const Authentication_Page = () => {
               variant="outlined"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              error={!!emailError}
+              helperText={emailError}
               sx={{
                 my: 1,
                 width: "100%",
@@ -380,6 +459,8 @@ const Authentication_Page = () => {
               variant="outlined"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              error={!!passwordError}
+              helperText={passwordError}
               InputProps={{
                 endAdornment: password && (
                   <InputAdornment position="end">
@@ -465,6 +546,22 @@ const Authentication_Page = () => {
                 <img src={IconFacebook} alt="Icon Login Facebook" />
               </IconButton>
             </Box>
+
+            {/* Alert Component */}
+            <Snackbar
+              open={alert.open}
+              autoHideDuration={6000}
+              onClose={handleCloseAlert}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+              <Alert
+                onClose={handleCloseAlert}
+                severity={alert.severity}
+                variant="filled"
+              >
+                {alert.message}
+              </Alert>
+            </Snackbar>
           </Box>
 
           {/* Toggle Panel */}

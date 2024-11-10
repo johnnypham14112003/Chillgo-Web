@@ -11,7 +11,7 @@ import CommissionDisplay from "../admin-components/CommissionDisplay";
 import WebsiteDisplay from "../admin-components/WebsiteDisplay";
 import { useGetDashboardData } from "../../data/admin";
 
-const AdminDashboard: React.FC = () => {
+const Admin_Dashboard: React.FC = () => {
   // Fetch user profile data
   //const { data: profile, isLoading: profileLoading, isError } = useGetProfile();
 
@@ -138,4 +138,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard;
+export default Admin_Dashboard;

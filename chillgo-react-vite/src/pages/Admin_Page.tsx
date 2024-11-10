@@ -28,7 +28,10 @@ const Admin_Page = () => {
   const isAtAdminRoot = location.pathname === "/admin";
 
   //For Authentication
-  const { isAuthenticated, accountInfo, logout } = useAuth();
+  const { isAuthenticated, accountInfo, logoutHandle } = useAuth();
+  if (!isAuthenticated) {
+    navigate("/authentication");
+  }
 
   const navBar = [
     {
@@ -60,7 +63,7 @@ const Admin_Page = () => {
     navigate("/");
   };
   const handleLogout = () => {
-    logout();
+    logoutHandle();
     navigate("/authentication");
   };
 

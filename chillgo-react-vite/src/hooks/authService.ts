@@ -38,9 +38,11 @@ export const clearAuth = () => {
 };
 
 // Hàm signup
-export const signupMethod = async (payload: SignupPayload): Promise<Response> => {
+export const signupFetch = async (
+  payload: SignupPayload
+): Promise<Response> => {
   try {
-    const response = await fetch(`${Server_URL}/accounts/register`, {
+    const response = await fetch(`${Server_URL}/api/accounts/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,6 +51,7 @@ export const signupMethod = async (payload: SignupPayload): Promise<Response> =>
     });
 
     if (!response.ok) {
+      alert(`Đã có lỗi xảy ra signup: ${response.body}`);
       throw new Error("Signup failed");
     }
 
@@ -60,7 +63,7 @@ export const signupMethod = async (payload: SignupPayload): Promise<Response> =>
 };
 
 // Hàm login
-export const loginMethod = async (
+export const loginFetch = async (
   payload: LoginPayload
 ): Promise<LoginResponse> => {
   try {
@@ -73,7 +76,7 @@ export const loginMethod = async (
     });
 
     if (!response.ok) {
-      alert(`Đã có lỗi xảy ra: ${response.body}`);
+      alert(`Đã có lỗi xảy ra khi login: ${response.body}`);
       throw new Error("Login failed");
     }
 

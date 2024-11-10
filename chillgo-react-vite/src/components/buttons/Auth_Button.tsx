@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ButtonKeyboard3d from "./Button_Keyboard_3d";
 
 export const AuthButton = () => {
-  const { isAuthenticated, accountInfo, logout } = useAuth();
+  const { isAuthenticated, accountInfo, logoutHandle } = useAuth();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -27,7 +27,7 @@ export const AuthButton = () => {
   };
 
   const handleLogout = () => {
-    logout();
+    logoutHandle();
     handleClose();
     navigate("/");
   };
