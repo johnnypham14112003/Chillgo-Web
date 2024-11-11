@@ -8,7 +8,7 @@ interface LoadingLoader_Vars {
   displayText: string;
 }
 
-export const LoadingLoader: FC<LoadingLoader_Vars> = ({displayText}) => {
+const LoadingLoader: FC<LoadingLoader_Vars> = ({displayText}) => {
   return (
     <div id="wifi-loader">
       <svg viewBox="0 0 86 86" className="circle-outer">
@@ -25,3 +25,5 @@ export const LoadingLoader: FC<LoadingLoader_Vars> = ({displayText}) => {
     </div>
   );
 };
+
+export default LoadingLoader;
