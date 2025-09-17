@@ -6,7 +6,7 @@ This Repository is the source code of Web UI of Chillgo project for Landing Page
 Other relate repository of Chillgo Project:
 
 - [Chillgo-Backend](https://github.com/johnnypham14112003/Chillgo-Backend.git)
-- [Chillgo-Mobile]()
+- [Chillgo-Mobile](https://github.com/johnnypham14112003/chillgo_mobile)
 
 ## How To Use
 
